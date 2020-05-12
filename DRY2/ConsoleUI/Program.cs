@@ -20,7 +20,7 @@ namespace ConsoleUI
             EmployeeProcessor processor = new EmployeeProcessor();
             string employeeID = processor.GenerateEmployeeID(firstName, lastName);
 
-            Console.WriteLine($"Your employee id is: {employeeID}.");
+            Console.WriteLine($"Your employee id is: {employeeID}");
 
             Console.ReadLine();
         }
