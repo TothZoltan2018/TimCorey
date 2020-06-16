@@ -8,6 +8,9 @@ namespace DemoLibrary
 {
     public class Account
     {
+        public event EventHandler<string> TransactionApprovedEvent;
+        public event EventHandler<OverdraftEventArgs> OverDraftEvent;
+
         public string AccountName { get; set; }
         public decimal Balance { get; private set; }
 
@@ -22,6 +25,8 @@ namespace DemoLibrary
         {
             _transactions.Add($"Deposited { string.Format("{0:C2}", amount) } for { depositName }");
             Balance += amount;
+            //This triggers the event: something has happened
+            TransactionApprovedEvent?.Invoke(this, depositName);
             return true;
         }
 
@@ -32,6 +37,8 @@ namespace DemoLibrary
             {
                 _transactions.Add($"Withdrew { string.Format("{0:C2}", amount) } for { paymentName }");
                 Balance -= amount;
+                //This triggers the event: something has happened
+                TransactionApprovedEvent?.Invoke(this, paymentName);
                 return true;
             }
             else
@@ -40,11 +47,21 @@ namespace DemoLibrary
                 if (backupAccount != null)
                 {
                     // Checks to see if we have enough money in the backup account
-                    if ((backupAccount.Balance + Balance) > amount)
-                    {
+                    if ((backupAccount.Balance + Balance) >= amount)
+                    {                        
                         // We have enough backup funds so transfar the amount to this account
                         // and then complete the transaction.
+                        // The amount needs to be on the backup ("Savings") account to cover the payment.
                         decimal amountNeeded = amount - Balance;
+                        OverdraftEventArgs args = new OverdraftEventArgs(amountNeeded, "Extra info");
+                        OverDraftEvent?.Invoke(this, args);
+
+                        if (args.CancelTransaction == true)
+                        {
+                            //transction can't be done
+                            return false;
+                        }
+
                         bool overdraftSucceeded = backupAccount.MakePayment("Overdraft Protection", amountNeeded);
 
                         // This should always be true but we will check anyway
@@ -58,6 +75,8 @@ namespace DemoLibrary
 
                         _transactions.Add($"Withdrew { string.Format("{0:C2}", amount) } for { paymentName }");
                         Balance -= amount;
+                        //This triggers the event: something has happened
+                        TransactionApprovedEvent?.Invoke(this, paymentName);
 
                         return true;
                     }

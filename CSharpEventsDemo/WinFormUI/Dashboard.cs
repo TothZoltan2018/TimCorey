@@ -18,7 +18,7 @@ namespace WinFormUI
         public Dashboard()
         {
             InitializeComponent();
-
+                        
             LoadTestingData();
 
             WireUpForm();
@@ -44,8 +44,38 @@ namespace WinFormUI
             savingsTransactions.DataSource = customer.SavingsAccount.Transactions;
             checkingBalanceValue.Text = string.Format("{0:C2}", customer.CheckingAccount.Balance);
             savingsBalanceValue.Text = string.Format("{0:C2}", customer.SavingsAccount.Balance);
+
+            //A bekovetkezo esemenyre felirakozik egy esemenykezelo fgv
+            customer.CheckingAccount.TransactionApprovedEvent += CheckingAccount_TransactionApprovedEvent;
+            customer.SavingsAccount.TransactionApprovedEvent += SavingsAccount_TransactionApprovedEvent;
+            customer.CheckingAccount.OverDraftEvent += CheckingAccount_OverDraftEvent;
         }
 
+        //Listener
+        private void CheckingAccount_OverDraftEvent(object sender, OverdraftEventArgs e)
+        {
+            errorMessage.Text = $"You had an overdraft protection transfer of {string.Format("{0:C2}", e.AmountOverdrafted)}";
+            e.CancelTransaction = denyOverdraft.Checked;
+            errorMessage.Visible = true;
+        }
+
+        //Listener: if TransactionApprovedEvent event happened, do this code
+        private void SavingsAccount_TransactionApprovedEvent(object sender, string e)
+        {
+            savingsTransactions.DataSource = null;
+            savingsTransactions.DataSource = customer.SavingsAccount.Transactions;            
+            savingsBalanceValue.Text = string.Format("{0:C2}", customer.SavingsAccount.Balance);
+        }
+
+        //Listener: if TransactionApprovedEvent event happened, do this code
+        private void CheckingAccount_TransactionApprovedEvent(object sender, string e)
+        {
+            checkingTransactions.DataSource = null;
+            checkingTransactions.DataSource = customer.CheckingAccount.Transactions;
+            checkingBalanceValue.Text = string.Format("{0:C2}", customer.CheckingAccount.Balance);
+        }
+
+        //It's the listener to an event handler
         private void recordTransactionsButton_Click(object sender, EventArgs e)
         {
             Transactions transactions = new Transactions(customer);
