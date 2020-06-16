@@ -45,10 +45,18 @@ namespace WinFormUI
             checkingBalanceValue.Text = string.Format("{0:C2}", customer.CheckingAccount.Balance);
             savingsBalanceValue.Text = string.Format("{0:C2}", customer.SavingsAccount.Balance);
 
-            //A bekovetkezo esemenyre felirakozik egy esemenykezelo fgv
+            // A bekovetkezo esemenyre felirakozik egy esemenykezelo fgv
             customer.CheckingAccount.TransactionApprovedEvent += CheckingAccount_TransactionApprovedEvent;
+
+            // Enyem
+            customer.CheckingAccount.TransactionApprovedEvent += CheckingAccount_TransactionApprovedEvent1;
             customer.SavingsAccount.TransactionApprovedEvent += SavingsAccount_TransactionApprovedEvent;
             customer.CheckingAccount.OverDraftEvent += CheckingAccount_OverDraftEvent;
+        }
+
+        private void CheckingAccount_TransactionApprovedEvent1(object sender, string e)
+        {
+            MessageBox.Show("Zoli's event handler added to the list.");
         }
 
         //Listener
