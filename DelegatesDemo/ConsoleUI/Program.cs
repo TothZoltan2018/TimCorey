@@ -10,11 +10,12 @@ namespace ConsoleUI
     class Program
     {
         static ShoppingCartModel cart = new ShoppingCartModel();
-
+        
         static void Main(string[] args)
         {
             PopulateCartWithDemoData();
 
+            Console.WriteLine($"The total for the cart is {cart.GenerateTotal(SubTotalAlert):C2}");
             
 
             Console.WriteLine();
@@ -22,6 +23,10 @@ namespace ConsoleUI
             Console.ReadKey();
         }
 
+        private static void SubTotalAlert(decimal subTotal)
+        {
+            Console.WriteLine($"The subtotal is {subTotal:C2}");
+        }
         private static void PopulateCartWithDemoData()
         {
             cart.Items.Add(new ProductModel { ItemName = "Cereal", Price = 3.63M });
