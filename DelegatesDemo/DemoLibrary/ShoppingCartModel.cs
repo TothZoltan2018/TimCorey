@@ -11,12 +11,15 @@ namespace DemoLibrary
         public delegate void MentionDiscount(decimal subTotalThisNameCanBeAnything);
         public List<ProductModel> Items { get; set; } = new List<ProductModel>();
         
-        public decimal GenerateTotal(MentionDiscount mentionDiscount,
-            Func<List<ProductModel>, decimal, decimal> calculateDiscountedTotal)
+        public decimal GenerateTotal(MentionDiscount mentionSubTotal,
+            Func<List<ProductModel>, decimal, decimal> calculateDiscountedTotal,
+            Action<string> tellUserWeAreDiscounting)
         {
             decimal subTotal = Items.Sum(x => x.Price);
 
-            mentionDiscount(subTotal);
+            mentionSubTotal(subTotal);
+
+            tellUserWeAreDiscounting("We are applyng your discount.");
 
             return calculateDiscountedTotal(Items, subTotal);
         }
