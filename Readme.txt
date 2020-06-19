@@ -5,4 +5,4 @@ Folder DRY
 Design Patterns: Don't Repeat Yourself in C#
 https://www.youtube.com/watch?v=dhnsegiPXoo&list=PLLWMQd6PeGY2GVsQZ-u3DPXqwwKW8MkiP&index=10
 
-For Unit testing install xunit and xunint.runner.visualstudio nuet packages!
+For Unit testing install xunit and xunint.runner.visualstudio nuget packages!
