@@ -13,8 +13,16 @@ namespace EmployeeLibrary
         EmployeeModel employee = new EmployeeModel();
 
         // Taking over a method to calculate number of holidays
-        public int CalculateAnnualHolidaysForEmployee(Calculate calculate, int ID)
-        {            
+        public int CalculateAnnualHolidaysForEmployeeWithDelegate(Calculate calculate, int ID)
+        {
+            employee = Employees.First(e => e.ID == ID);
+            return employee.AnnualHolidays = calculate(employee);
+            //return calculate(employee);            
+        }
+
+        // The same as above but using Func instead of delegate
+        public int CalculateAnnualHolidaysForEmployeeWithFunc(Func<EmployeeModel, int> calculate, int ID)
+        {
             employee = Employees.First(e => e.ID == ID);
             return employee.AnnualHolidays = calculate(employee);
             //return calculate(employee);            
@@ -25,10 +33,5 @@ namespace EmployeeLibrary
             employee = Employees.First(e => e.ID == ID);
             display($"Employee Id:{employee.ID} has {employee.AnnualHolidays} holidays per year.");
         }
-        //private static void ShowHolidays(string employeeIdAndHolidaysText)
-        //{
-        //    Console.WriteLine(employeeIdAndHolidaysText);
-        //}
-
     }
 }

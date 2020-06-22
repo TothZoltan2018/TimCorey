@@ -18,28 +18,51 @@ namespace ConsoleApp1
                 { new EmployeeModel { ID = 3, FirstName = "Bill", LastName = "Doe", Age = 22, IsMarried = true, Level = JobLevel.junior , Location = WorkLocation.Germany, NumberOfChildren = 1 } },
                 { new EmployeeModel { ID = 4, FirstName = "Sue", LastName = "Wood", Age = 33, IsMarried = true, Level = JobLevel.mediore, Location = WorkLocation.Hungary, NumberOfChildren = 5 } },
             };
-                        
+
             HolidayCalculatorModel holidayCalculatorModel = new HolidayCalculatorModel();
             // Set the Employee's list to the library
             holidayCalculatorModel.Employees = employees;
-                        
-            int holidays = holidayCalculatorModel.CalculateAnnualHolidaysForEmployee(calculate, 3);
 
-            Console.WriteLine(holidays);
-
+            // ########### First way to calculate holidays  ########### 
+            holidayCalculatorModel.CalculateAnnualHolidaysForEmployeeWithDelegate(calculate, 2);
             //The following to lines behaves the same
             holidayCalculatorModel.DisplayNumberOfHolidays(ShowHolidays, 2);
-            holidayCalculatorModel.DisplayNumberOfHolidays(Console.WriteLine, 3);
-
+            holidayCalculatorModel.DisplayNumberOfHolidays(Console.WriteLine, 2);
+            // ########### An other way to calculate holidays  ########### 
+            holidayCalculatorModel.CalculateAnnualHolidaysForEmployeeWithFunc(calculate2, 2);
+            holidayCalculatorModel.DisplayNumberOfHolidays(ShowHolidays, 2);
+            // ########### The same way as before to calculate holidays but with anonymous method ########### 
+            holidayCalculatorModel.CalculateAnnualHolidaysForEmployeeWithFunc(x => {
+                switch (x.Location)
+                {
+                    case WorkLocation.US:
+                        return x.AnnualHolidays = 20;
+                    case WorkLocation.Germany:
+                        return x.AnnualHolidays = 30;
+                    case WorkLocation.Hungary:
+                        return x.AnnualHolidays = 40;
+                    default:
+                        return x.AnnualHolidays = 0;
+                }
+            } , 2);
+            holidayCalculatorModel.DisplayNumberOfHolidays(ShowHolidays, 2);
 
             Console.ReadLine();
         }
 
-        private static void ShowHolidays(string employeeIdAndHolidaysText)
+        private static int calculate2(EmployeeModel e)
         {
-            // Do something...
-            // Do something...
-            Console.WriteLine(employeeIdAndHolidaysText);
+            switch (e.Location)
+            {
+                case WorkLocation.US:
+                    return e.AnnualHolidays = 20;
+                case WorkLocation.Germany:
+                    return e.AnnualHolidays = 30;
+                case WorkLocation.Hungary:
+                    return e.AnnualHolidays = 40;
+                default:
+                    return e.AnnualHolidays = 0;                    
+            }            
         }
 
         private static int calculate(EmployeeModel e)
@@ -67,6 +90,13 @@ namespace ConsoleApp1
             }
 
             return BaseHoliday + ageBasedHolidays + marriageBasedHolidays;
+        }
+
+        private static void ShowHolidays(string employeeIdAndHolidaysText)
+        {
+            // Do something...
+            // Do something...
+            Console.WriteLine(employeeIdAndHolidaysText);
         }
 
 
