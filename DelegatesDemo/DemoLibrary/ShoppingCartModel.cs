@@ -19,7 +19,7 @@ namespace DemoLibrary
 
             mentionSubTotal(subTotal);
 
-            tellUserWeAreDiscounting("We are applyng your discount.");
+            tellUserWeAreDiscounting("We are applying your discount.");
 
             return calculateDiscountedTotal(Items, subTotal);
         }
