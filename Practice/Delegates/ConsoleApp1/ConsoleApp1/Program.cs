@@ -96,7 +96,7 @@ namespace ConsoleApp1
         {
             // Do something...
             // Do something...
-            Console.WriteLine(employeeIdAndHolidaysText);
+            Console.WriteLine(employeeIdAndHolidaysText + " Special to Console UI");
         }
 
 

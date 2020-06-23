@@ -31,7 +31,7 @@ namespace EmployeeLibrary
         public void DisplayNumberOfHolidays(Action<string> display, int ID)
         {
             employee = Employees.First(e => e.ID == ID);
-            display($"Employee Id:{employee.ID} has {employee.AnnualHolidays} holidays per year.");
+            display($"Employee Id: {employee.ID} has {employee.AnnualHolidays} holidays per year.");
         }
     }
 }
