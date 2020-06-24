@@ -68,8 +68,7 @@ namespace WindowsFormsApp1
         private void PopUpMessageBox(string v)
         {
             v = v.Replace("holidays per year", "HAPPYDAYS annually");
-            MessageBox.Show(v + " (Special to WinForm MessageBox)");
+            MessageBox.Show(((EmployeeModel)comboBox1.SelectedItem).FirstName + " " + ((EmployeeModel)comboBox1.SelectedItem).LastName + ", " + v + " (Special to WinForm MessageBox)");            
         }
-
-}
+    }
 }

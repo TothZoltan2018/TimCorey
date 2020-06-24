@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EmployeeLibrary
 {
-    public class HolidayCalculatorModel
+    public class HolidayCalculatorModel : EmployeeModel
     {
         public delegate int Calculate(EmployeeModel e);
         public List<EmployeeModel> Employees { get; set; } = new List<EmployeeModel>();
