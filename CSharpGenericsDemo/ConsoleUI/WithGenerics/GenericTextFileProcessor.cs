@@ -12,6 +12,7 @@ namespace ConsoleUI
         {
             var lines = System.IO.File.ReadAllLines(filePath).ToList();
             List<T> output = new List<T>();
+            
             T entry = new T();
             var cols = entry.GetType().GetProperties();
 
@@ -49,7 +50,7 @@ namespace ConsoleUI
                     {
                         if (col.Name == headers[i])
                         {
-                            col.SetValue(entry, Convert.ChangeType(vals[i], col.PropertyType));
+                            col.SetValue(entry, Convert.ChangeType(vals[i], col.PropertyType));                            
                         }
                     }
                 }
@@ -60,7 +61,7 @@ namespace ConsoleUI
             return output;
         }
 
-        public static void SaveToTextFile<T>(List<T> data, string filePath) where T : class, new()
+        public static void SaveToTextFile<T>(List<T> data, string filePath) where T : class//, new()
         {
             List<string> lines = new List<string>();
             StringBuilder line = new StringBuilder();
