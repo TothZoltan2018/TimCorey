@@ -99,7 +99,7 @@ namespace WPFUserInterface
                 tasks.Add(DownloadWebsiteAsync(site));
             }
 
-            // waits until all tasks on the list aer done
+            // waits until all tasks on the list are done
             var results = await Task.WhenAll(tasks);
 
             foreach (var item in results)

@@ -33,7 +33,7 @@ namespace WPFUserInterface
             List<string> websites = PrepData();
             List<WebsiteDataModel> output = new List<WebsiteDataModel>();
 
-            foreach (string site in websites)
+            foreach (string site in websites)            
             {
                 WebsiteDataModel results = DownloadWebsite(site);
                 output.Add(results);
@@ -47,6 +47,8 @@ namespace WPFUserInterface
             List<string> websites = PrepData();
             List<WebsiteDataModel> output = new List<WebsiteDataModel>();
 
+            // Inside the foreach code execution is parralell, not iteration by iteration
+            // It locks up until the longest task is ready, so the UI is inresponsive.
             Parallel.ForEach<string>(websites, (site) =>
             {
                 WebsiteDataModel results = DownloadWebsite(site);
@@ -56,8 +58,7 @@ namespace WPFUserInterface
             return output;
         }
 
-
-
+        // ############### This is the best way ##################
         public static async Task<List<WebsiteDataModel>> RunDownloadParallelAsyncV2(IProgress<ProgressReportModel> progress)
         {
             List<string> websites = PrepData();
@@ -68,7 +69,7 @@ namespace WPFUserInterface
             {
                 Parallel.ForEach<string>(websites, (site) =>
                 {
-                    WebsiteDataModel results = DownloadWebsite(site);
+                    WebsiteDataModel results = DownloadWebsite(site);                    
                     output.Add(results);
 
                     report.SitesDownloaded = output;
@@ -80,6 +81,12 @@ namespace WPFUserInterface
             return output;
         }
 
+        /// <summary>
+        /// 'IProgress': Every time we make progress, we can call this and bubble up an event to the caller
+        /// </summary>
+        /// <param name="progress"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public static async Task<List<WebsiteDataModel>> RunDownloadAsync(IProgress<ProgressReportModel> progress, CancellationToken cancellationToken)
         {
             List<string> websites = PrepData();

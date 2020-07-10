@@ -31,8 +31,9 @@ namespace WPFUserInterface
         private void executeSync_Click(object sender, RoutedEventArgs e)
         {
             var watch = System.Diagnostics.Stopwatch.StartNew();
-
-            var results = DemoMethods.RunDownloadParallelSync();
+            
+            var results = DemoMethods.RunDownloadSync();
+            //var results = DemoMethods.RunDownloadParallelSync();
             PrintResults(results);
 
             watch.Stop();
@@ -53,6 +54,9 @@ namespace WPFUserInterface
                 var results = await DemoMethods.RunDownloadAsync(progress, cts.Token);
                 PrintResults(results);
             }
+            // cancelOperation_Click event handler creates a cancel on CancellationTokenSource
+            // In the try block RunDownloadAsync is called. Inside that there is
+            // cancellationToken.ThrowIfCancellationRequested(); which throws OperationCanceledException
             catch (OperationCanceledException)
             {
                 resultsWindow.Text += $"The async download was cancelled. { Environment.NewLine }";
@@ -77,6 +81,7 @@ namespace WPFUserInterface
 
             var watch = System.Diagnostics.Stopwatch.StartNew();
 
+            //var results = await DemoMethods.RunDownloadParallelAsync();
             var results = await DemoMethods.RunDownloadParallelAsyncV2(progress);
             PrintResults(results);
 
