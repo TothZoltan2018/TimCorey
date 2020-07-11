@@ -58,29 +58,6 @@ namespace WPFUserInterface
             return output;
         }
 
-        // ############### This is the best way ##################
-        public static async Task<List<WebsiteDataModel>> RunDownloadParallelAsyncV2(IProgress<ProgressReportModel> progress)
-        {
-            List<string> websites = PrepData();
-            List<WebsiteDataModel> output = new List<WebsiteDataModel>();
-            ProgressReportModel report = new ProgressReportModel();
-
-            await Task.Run(() =>
-            {
-                Parallel.ForEach<string>(websites, (site) =>
-                {
-                    WebsiteDataModel results = DownloadWebsite(site);                    
-                    output.Add(results);
-
-                    report.SitesDownloaded = output;
-                    report.PercentageComplete = (output.Count * 100) / websites.Count;
-                    progress.Report(report);
-                });
-            });
-
-            return output;
-        }
-
         /// <summary>
         /// 'IProgress': Every time we make progress, we can call this and bubble up an event to the caller
         /// </summary>
@@ -121,6 +98,30 @@ namespace WPFUserInterface
             var results = await Task.WhenAll(tasks);
 
             return new List<WebsiteDataModel>(results);
+        }
+
+
+        // ############### This is the best way ##################
+        public static async Task<List<WebsiteDataModel>> RunDownloadParallelAsyncV2(IProgress<ProgressReportModel> progress)
+        {
+            List<string> websites = PrepData();
+            List<WebsiteDataModel> output = new List<WebsiteDataModel>();
+            ProgressReportModel report = new ProgressReportModel();
+
+            await Task.Run(() =>
+            {
+                Parallel.ForEach<string>(websites, (site) =>
+                {
+                    WebsiteDataModel results = DownloadWebsite(site);                    
+                    output.Add(results);
+
+                    report.SitesDownloaded = output;
+                    report.PercentageComplete = (output.Count * 100) / websites.Count;
+                    progress.Report(report);
+                });
+            });
+
+            return output;
         }
 
         private static async Task<WebsiteDataModel> DownloadWebsiteAsync(string websiteURL)

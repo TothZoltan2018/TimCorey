@@ -22,6 +22,7 @@ namespace WpfApp1
     /// </summary>
     public partial class MainWindow : Window
     {
+        Progress<ProgressReportModel> progress = new Progress<ProgressReportModel>();
         public MainWindow()
         {
             InitializeComponent();
@@ -40,6 +41,7 @@ namespace WpfApp1
 
         private void executeSyncParallel_Click(object sender, RoutedEventArgs e)
         {
+            //progress.ProgressChanged += Progress_ProgressChanged;
             var watch = Stopwatch.StartNew();
 
             PrintToResultWindow(SyncAsyncParall.MethodParallelSync());
@@ -50,22 +52,30 @@ namespace WpfApp1
         }
 
         private async void executeAsync_Click(object sender, RoutedEventArgs e)
-        {
+        {   
+            progress.ProgressChanged += Progress_ProgressChanged;
             var watch = Stopwatch.StartNew();
 
             //It calls the same Synchronous method, but asynchronously by 'Task.Run'
             //List<string> result = await Task.Run(()=> SyncAsyncParall.MethodSync());
             //Alternatively, we can call our asynchronous method like this:
-            List<string> result = await SyncAsyncParall.MethodAsync();
-            PrintToResultWindow(result);
+            List<string> result = await SyncAsyncParall.MethodAsync(progress);
+            //PrintToResultWindow(result);
 
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;
             resultsWindow.Text += nameof(executeAsync_Click) + " " + elapsedMs.ToString() + "\n";
         }
 
+        private void Progress_ProgressChanged(object sender, ProgressReportModel e)
+        {
+            dashboardProgress.Value = e.PercentageComplete;
+            PrintToResultWindow(e.ReadyProcessNames);
+        }
+
         private async void executeAsyncParallel_Click(object sender, RoutedEventArgs e)
         {
+            progress.ProgressChanged += Progress_ProgressChanged;
             var watch = Stopwatch.StartNew();
 
             List<string> result = await SyncAsyncParall.MethodParallelAsync();
@@ -76,14 +86,18 @@ namespace WpfApp1
             resultsWindow.Text += nameof(executeAsync_Click) + " " + elapsedMs.ToString() + "\n";
         }
 
-        private void executeParallelAsync_Click(object sender, RoutedEventArgs e)
+        private async void executeParallelAsyncV2_Click(object sender, RoutedEventArgs e)
         {
+            progress.ProgressChanged += Progress_ProgressChanged;
+            var watch = Stopwatch.StartNew();
+            progress.ProgressChanged += Progress_ProgressChanged;
 
-        }
+            List<string> result = await SyncAsyncParall.MethodParallelAsyncV2(progress);
+            //PrintToResultWindow(result);
 
-        private void executeParallelAsyncV2_Click(object sender, RoutedEventArgs e)
-        {
-
+            watch.Stop();
+            var elapsedMs = watch.ElapsedMilliseconds;
+            resultsWindow.Text += nameof(executeAsync_Click) + " " + elapsedMs.ToString() + "\n";
         }
 
         private void cancelOperation_Click(object sender, RoutedEventArgs e)
@@ -93,6 +107,7 @@ namespace WpfApp1
 
         private void PrintToResultWindow(List<string> result)
         {
+            resultsWindow.Text = "";
             foreach (var item in result)
             {
                 resultsWindow.Text += item; 

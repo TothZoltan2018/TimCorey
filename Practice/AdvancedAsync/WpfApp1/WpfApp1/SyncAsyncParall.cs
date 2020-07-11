@@ -10,6 +10,8 @@ namespace WpfApp1
 {
     public class SyncAsyncParall
     {
+        //ProgressReportModel report = new ProgressReportModel(); //This will not be created here... Wrong place.
+
         public static string DummyLongLastMethodSync(DummyData dummyData)
         {
             Thread.Sleep(dummyData.ExecTime);
@@ -50,19 +52,24 @@ namespace WpfApp1
 
             return output;
         }
-        public static async Task<List<string>> MethodAsync()
+        public static async Task<List<string>> MethodAsync(IProgress<ProgressReportModel> progress)
         {
             var dummyDataList = CreateDummyDataList();
             List<string> output = new List<string>();
+            ProgressReportModel report = new ProgressReportModel();
 
             foreach (var data in dummyDataList)
             {
-                //It calls the same Synchronous method, but asynchronously by 'Task.Run'
+                // It calls the same Synchronous method, but asynchronously by 'Task.Run'
                 //string result = await DummyLongLastMethodAsync(data);
 
-                //Alternatively, we can call our asynchronous method like this:
+                // Alternatively, we can call our asynchronous method like this:
                 string result = await Task.Run(() => DummyLongLastMethodSync(data));
                 output.Add(result);
+
+                report.ReadyProcessNames = output;
+                report.PercentageComplete = (output.Count * 100) / dummyDataList.Count;
+                progress.Report(report);                
             }
 
             return output;
@@ -71,28 +78,55 @@ namespace WpfApp1
         public static async Task<List<string>> MethodParallelAsync()
         {
             var dummyDataList = CreateDummyDataList();
-            //List<string> output = new List<string>();
             List<Task<string>> taskList = new List<Task<string>>();
+            ProgressReportModel report = new ProgressReportModel();
 
             foreach (var data in dummyDataList)
-            {                
+            {
                 //taskList.Add(Task.Run(() => DummyLongLastMethodSync(data)));
-                taskList.Add(DummyLongLastMethodAsync(data));             
+                // Alternatively:
+                taskList.Add(DummyLongLastMethodAsync(data));
             }
 
             var results = await Task.WhenAll(taskList);
 
-            return results.ToList();
+            //return results.ToList(); 
+            //Alternatively:
+            return new List<string>(results);
+        }
+
+        public static async Task<List<string>> MethodParallelAsyncV2(IProgress<ProgressReportModel> progress)
+        {
+            var dummyDataList = CreateDummyDataList();
+            List<string> output = new List<string>();
+            ProgressReportModel report = new ProgressReportModel();
+
+            await Task.Run(() =>
+            {
+                Parallel.ForEach<DummyData>(dummyDataList, data =>
+                {
+                    string result = DummyLongLastMethodSync(data); //Sync!!!
+                    output.Add(result);
+
+                    report.ReadyProcessNames = output;
+                    report.PercentageComplete = (output.Count * 100) / dummyDataList.Count;
+                    progress.Report(report);
+                });
+            });
+
+            return output;
         }
 
         private static List<DummyData> CreateDummyDataList()
         {
             List<DummyData> dummyData = new List<DummyData>()
             {
-                new DummyData(){ ExecTime = 1500, Name = "A"},
+                new DummyData(){ ExecTime = 1200, Name = "A"},
                 new DummyData(){ ExecTime = 500, Name = "B"},
-                new DummyData(){ ExecTime = 2800, Name = "C"},
-                new DummyData(){ ExecTime = 1000, Name = "D"},
+                new DummyData(){ ExecTime = 1800, Name = "C"},
+                new DummyData(){ ExecTime = 700, Name = "E"},
+                new DummyData(){ ExecTime = 100, Name = "F"},
+                new DummyData(){ ExecTime = 200, Name = "G"},
             };
 
             return dummyData;
@@ -104,6 +138,4 @@ namespace WpfApp1
         public int ExecTime { get; set; }
         public string Name { get; set; }
     }
-
-
 }

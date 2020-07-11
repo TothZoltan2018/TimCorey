@@ -20,7 +20,7 @@ namespace WPFUserInterface
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {
+    {        
         CancellationTokenSource cts = new CancellationTokenSource();
 
         public MainWindow()
