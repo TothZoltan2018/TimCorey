@@ -16,12 +16,13 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace WpfApp1
-{
+{    
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+        CancellationTokenSource cts = new CancellationTokenSource();
         Progress<ProgressReportModel> progress = new Progress<ProgressReportModel>();
         public MainWindow()
         {
@@ -52,15 +53,20 @@ namespace WpfApp1
         }
 
         private async void executeAsync_Click(object sender, RoutedEventArgs e)
-        {   
+        {
+            cts = new CancellationTokenSource();
             progress.ProgressChanged += Progress_ProgressChanged;
             var watch = Stopwatch.StartNew();
 
-            //It calls the same Synchronous method, but asynchronously by 'Task.Run'
-            //List<string> result = await Task.Run(()=> SyncAsyncParall.MethodSync());
-            //Alternatively, we can call our asynchronous method like this:
-            List<string> result = await SyncAsyncParall.MethodAsync(progress);
-            //PrintToResultWindow(result);
+            try
+            {
+                List<string> result = await SyncAsyncParall.MethodAsync(progress, cts.Token);
+                //PrintToResultWindow(result);
+            }
+            catch (OperationCanceledException)
+            {
+                resultsWindow.Text += $"The 'MethodAsync' execution was cancelled. { Environment.NewLine }";                
+            }
 
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;
@@ -88,12 +94,27 @@ namespace WpfApp1
 
         private async void executeParallelAsyncV2_Click(object sender, RoutedEventArgs e)
         {
+            cts = new CancellationTokenSource();
+
             progress.ProgressChanged += Progress_ProgressChanged;
             var watch = Stopwatch.StartNew();
             progress.ProgressChanged += Progress_ProgressChanged;
 
-            List<string> result = await SyncAsyncParall.MethodParallelAsyncV2(progress);
-            //PrintToResultWindow(result);
+            try
+            {
+                List<string> result = await SyncAsyncParall.MethodParallelAsyncV2(progress, cts.Token);
+                //PrintToResultWindow(result);
+            }
+            // Because of the parallel executon in 'MethodParallelAsyncV2', multiple exceptions will be thrown
+            // AggregateException can catch them.
+            catch (AggregateException ex)
+            {
+                ex.Handle(innerEx =>
+                {
+                    resultsWindow.Text += $"The 'MethodParallelAsyncV2' execution was cancelled. \"{innerEx.Message}\" was thrown { Environment.NewLine }";
+                    return true;
+                });                              
+            }
 
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;
@@ -102,7 +123,7 @@ namespace WpfApp1
 
         private void cancelOperation_Click(object sender, RoutedEventArgs e)
         {
-
+            cts.Cancel();            
         }
 
         private void PrintToResultWindow(List<string> result)

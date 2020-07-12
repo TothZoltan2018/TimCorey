@@ -22,7 +22,7 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto" MinWidth="70"/>
+            <ColumnDefinition Width="*" MinWidth="70"/>
             <!--<ColumnDefinition Width="99*"/>
             <ColumnDefinition Width="257*"/>-->
         </Grid.ColumnDefinitions>
@@ -39,7 +39,7 @@
         <Button x:Name="cancelOperation" Grid.Row="7" Margin="10,10,9,10" Padding="10" Click="cancelOperation_Click">Cancel Operation</Button>
         <ProgressBar x:Name="dashboardProgress" Value="0" Height="30" Margin="10,10,9,10" Grid.Row="8" />
 
-        <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.Row="0" Grid.Column="1" Grid.RowSpan="9" CanContentScroll="True">
+        <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Visible" Grid.Row="0" Grid.Column="1" Grid.RowSpan="9" CanContentScroll="True">
             <TextBlock x:Name="resultsWindow" Margin="11,10,8,10" ScrollViewer.CanContentScroll="True"/>
         </ScrollViewer>
     </Grid>

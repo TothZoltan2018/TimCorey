@@ -52,7 +52,7 @@ namespace WpfApp1
 
             return output;
         }
-        public static async Task<List<string>> MethodAsync(IProgress<ProgressReportModel> progress)
+        public static async Task<List<string>> MethodAsync(IProgress<ProgressReportModel> progress, CancellationToken cancellation)
         {
             var dummyDataList = CreateDummyDataList();
             List<string> output = new List<string>();
@@ -66,6 +66,9 @@ namespace WpfApp1
                 // Alternatively, we can call our asynchronous method like this:
                 string result = await Task.Run(() => DummyLongLastMethodSync(data));
                 output.Add(result);
+
+                // If we hit the 'Cancel Opeation' button, this will throw an exception which is caught in the method calls the current one
+                cancellation.ThrowIfCancellationRequested();
 
                 report.ReadyProcessNames = output;
                 report.PercentageComplete = (output.Count * 100) / dummyDataList.Count;
@@ -95,7 +98,7 @@ namespace WpfApp1
             return new List<string>(results);
         }
 
-        public static async Task<List<string>> MethodParallelAsyncV2(IProgress<ProgressReportModel> progress)
+        public static async Task<List<string>> MethodParallelAsyncV2(IProgress<ProgressReportModel> progress, CancellationToken cancellation)
         {
             var dummyDataList = CreateDummyDataList();
             List<string> output = new List<string>();
@@ -105,8 +108,11 @@ namespace WpfApp1
             {
                 Parallel.ForEach<DummyData>(dummyDataList, data =>
                 {
-                    string result = DummyLongLastMethodSync(data); //Sync!!!
+                    string result = DummyLongLastMethodSync(data); // Sync!!!
                     output.Add(result);
+
+                    // If we hit the 'Cancel Opeation' button, this will throw an exception which is caught in the method calls the current one
+                    cancellation.ThrowIfCancellationRequested();
 
                     report.ReadyProcessNames = output;
                     report.PercentageComplete = (output.Count * 100) / dummyDataList.Count;
