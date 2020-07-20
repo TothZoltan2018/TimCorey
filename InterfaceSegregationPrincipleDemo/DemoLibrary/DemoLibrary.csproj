@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BD59A5E3-9317-4993-8978-FDBC7D363126}</ProjectGuid>
+    <ProjectGuid>{535A64A6-EFC4-4D10-B597-DA1DB869BBC0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DemoLibrary</RootNamespace>
@@ -40,14 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseEmployee.cs" />
-    <Compile Include="CEO.cs" />
-    <Compile Include="Employee.cs" />
-    <Compile Include="IEmployee.cs" />
-    <Compile Include="IManaged.cs" />
-    <Compile Include="IManager.cs" />
-    <Compile Include="Manager.cs" />
+    <Compile Include="AudioBook.cs" />
+    <Compile Include="Book.cs" />
+    <Compile Include="DVD.cs" />
+    <Compile Include="ILibraryItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReferenceBook.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
