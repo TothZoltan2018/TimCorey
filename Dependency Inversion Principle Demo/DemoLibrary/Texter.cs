@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace DemoLibrary
 {
-    public class Emailer : IMessageSender
+    public class Texter : IMessageSender
     {
         public void SendMessage(IPerson person, string message)
         {
-            Console.WriteLine($"Simulating sending an email to { person.EmailAddress }");
+            Console.WriteLine($"I am texting { person.FirstName } to say { message }");
         }
     }
 }
