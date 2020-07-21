@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DemoLibrary;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,8 @@ namespace ConsoleUI
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-
+            IBorrowableDVD dvd = new DVD();
+                        
             Console.ReadLine();
         }
     }

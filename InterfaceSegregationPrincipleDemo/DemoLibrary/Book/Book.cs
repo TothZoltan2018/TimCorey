@@ -6,18 +6,15 @@ using System.Threading.Tasks;
 
 namespace DemoLibrary
 {
-    public class AudioBook : ILibraryItem
+    public class Book : IBorrowableBook
     {
         public string LibraryId { get; set; }
         public string Title { get; set; }
         public string Author { get; set; }
-        // This prop has no sense!
-        public int Pages { get; set; } = -1;
+        public int Pages { get; set; }
         public int CheckOutDurationInDays { get; set; } = 14;
         public string Borrower { get; set; }
         public DateTime BorrowDate { get; set; }
-        //An additional prop, not in ILibraryItem
-        public int RuntimeInMinutes { get; set; }
 
         public void CheckOut(string borrower)
         {

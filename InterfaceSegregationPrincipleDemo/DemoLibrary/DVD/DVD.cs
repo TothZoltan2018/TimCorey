@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace DemoLibrary
 {
-    public class DVD : ILibraryItem
+    public class DVD : IBorrowableDVD
     {
         public string LibraryId { get; set; }
         public string Title { get; set; }
-        // This prop has no sense!
-        public string Author { get; set; } = "";
-        // This prop has no sense!
-        public int Pages { get; set; } = -1;
+        //// This prop has no sense!
+        //public string Author { get; set; } = "";
+        //// This prop has no sense!
+        //public int Pages { get; set; } = -1;
         public int CheckOutDurationInDays { get; set; } = 14;
         public string Borrower { get; set; }
         public DateTime BorrowDate { get; set; }
-        //An additional prop, not in ILibraryItem
+        ////An additional prop, not in ILibraryItem
         public List<string> Actors { get; set; }
-        //An additional prop, not in ILibraryItem
+        ////An additional prop, not in ILibraryItem
         public int RuntimeInMinutes { get; set; }
 
         public void CheckOut(string borrower)
