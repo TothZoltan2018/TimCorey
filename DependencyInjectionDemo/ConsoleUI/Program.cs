@@ -49,6 +49,9 @@ namespace ConsoleUI
 
                 // Run() calls the 'businessLogic.ProcessData()' method. 'businessLogic' is taken in in the constructor: 'Application(IBusinessLogic businessLogic)'
                 app.Run();
+
+                var business = scope.Resolve<IBusinessLogic>();
+                business.ProcessData();
             }
 
 
