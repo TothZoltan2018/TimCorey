@@ -22,8 +22,9 @@ namespace ConsoleUI
             // ### Register one class ###
             // This is the simpliest version of registration: It registers the BusinessLogic:
             // Whenever we look for IBusinessLogic, it returns an instance of BusinessLogic
-            builder.RegisterType<BusinessLogic>().As<IBusinessLogic>();            
-            
+            //builder.RegisterType<BusinessLogic>().As<IBusinessLogic>();
+            // We wrote a better class. Only here is needed to be changed!
+            builder.RegisterType<BetterBusinessLogic>().As<IBusinessLogic>();
             builder.RegisterType<Application>().As<IApplication>();
 
             // ### Register all classes in a folder ###
