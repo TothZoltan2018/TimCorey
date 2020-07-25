@@ -1,3 +1,5 @@
-﻿{
+﻿//This file changes the TestExplorer View. After close/reopen VS
+//Right click on this file, properties: Copy to output directory: Copy if newer
+{
   "methodDisplay": "method"
 }

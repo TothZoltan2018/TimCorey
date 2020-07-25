@@ -12,7 +12,7 @@ namespace DemoLibrary
         {
             if (file.Length < 10)
             {
-                throw new ArgumentException("The file name was too short", "file");
+                throw new ArgumentException("The file name was too short", "file"); // "file" is the param name caused the exception
                 //throw new System.IO.FileNotFoundException();
             }
 

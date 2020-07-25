@@ -7,7 +7,9 @@ using System.Windows.Forms;
 namespace WinFormUI
 {
     static class Program
-    {
+    { 
+        // See the lessons learned in CalculatorTests.cs
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
