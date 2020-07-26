@@ -44,7 +44,7 @@
             this.firstNameLabel.AutoSize = true;
             this.firstNameLabel.Location = new System.Drawing.Point(46, 101);
             this.firstNameLabel.Name = "firstNameLabel";
-            this.firstNameLabel.Size = new System.Drawing.Size(134, 33);
+            this.firstNameLabel.Size = new System.Drawing.Size(131, 29);
             this.firstNameLabel.TabIndex = 0;
             this.firstNameLabel.Text = "First Name";
             // 
@@ -53,7 +53,7 @@
             this.lastNameLabel.AutoSize = true;
             this.lastNameLabel.Location = new System.Drawing.Point(46, 190);
             this.lastNameLabel.Name = "lastNameLabel";
-            this.lastNameLabel.Size = new System.Drawing.Size(131, 33);
+            this.lastNameLabel.Size = new System.Drawing.Size(128, 29);
             this.lastNameLabel.TabIndex = 1;
             this.lastNameLabel.Text = "Last Name";
             // 
@@ -61,43 +61,43 @@
             // 
             this.firstNameText.Location = new System.Drawing.Point(52, 137);
             this.firstNameText.Name = "firstNameText";
-            this.firstNameText.Size = new System.Drawing.Size(234, 40);
+            this.firstNameText.Size = new System.Drawing.Size(234, 35);
             this.firstNameText.TabIndex = 2;
             // 
             // lastNameText
             // 
             this.lastNameText.Location = new System.Drawing.Point(52, 226);
             this.lastNameText.Name = "lastNameText";
-            this.lastNameText.Size = new System.Drawing.Size(234, 40);
+            this.lastNameText.Size = new System.Drawing.Size(234, 35);
             this.lastNameText.TabIndex = 3;
             // 
             // addPersonHeader
             // 
             this.addPersonHeader.AutoSize = true;
-            this.addPersonHeader.Font = new System.Drawing.Font("Open Sans SemiBold", 26.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.addPersonHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.addPersonHeader.Location = new System.Drawing.Point(32, 42);
             this.addPersonHeader.Name = "addPersonHeader";
-            this.addPersonHeader.Size = new System.Drawing.Size(213, 47);
+            this.addPersonHeader.Size = new System.Drawing.Size(207, 39);
             this.addPersonHeader.TabIndex = 4;
             this.addPersonHeader.Text = "Add Person";
             // 
             // listPeopleHeader
             // 
             this.listPeopleHeader.AutoSize = true;
-            this.listPeopleHeader.Font = new System.Drawing.Font("Open Sans SemiBold", 26.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listPeopleHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listPeopleHeader.Location = new System.Drawing.Point(380, 42);
             this.listPeopleHeader.Name = "listPeopleHeader";
-            this.listPeopleHeader.Size = new System.Drawing.Size(204, 47);
+            this.listPeopleHeader.Size = new System.Drawing.Size(199, 39);
             this.listPeopleHeader.TabIndex = 5;
             this.listPeopleHeader.Text = "List People";
             // 
             // listPeopleListBox
             // 
             this.listPeopleListBox.FormattingEnabled = true;
-            this.listPeopleListBox.ItemHeight = 33;
+            this.listPeopleListBox.ItemHeight = 29;
             this.listPeopleListBox.Location = new System.Drawing.Point(388, 107);
             this.listPeopleListBox.Name = "listPeopleListBox";
-            this.listPeopleListBox.Size = new System.Drawing.Size(332, 367);
+            this.listPeopleListBox.Size = new System.Drawing.Size(332, 352);
             this.listPeopleListBox.TabIndex = 6;
             // 
             // addPersonButton
@@ -122,7 +122,7 @@
             // 
             // PeopleForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(14F, 33F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(14F, 29F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(754, 492);
             this.Controls.Add(this.refreshListButton);
@@ -134,7 +134,7 @@
             this.Controls.Add(this.firstNameText);
             this.Controls.Add(this.lastNameLabel);
             this.Controls.Add(this.firstNameLabel);
-            this.Font = new System.Drawing.Font("Open Sans", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(7, 8, 7, 8);
             this.Name = "PeopleForm";
             this.Text = "SQLite Demo Form by Tim Corey";
