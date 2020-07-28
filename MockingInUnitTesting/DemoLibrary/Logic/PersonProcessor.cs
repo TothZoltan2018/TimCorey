@@ -19,6 +19,9 @@ namespace DemoLibrary.Logic
 
         public PersonModel CreatePerson(string firstName, string lastName, string heightText)
         {
+            // This is a dependency on the 'PersonModel', because we are not passing into the constructor.
+            // We can do it because that is a model which only holds data and does not do processing.
+            // Therefore it does not really violates the Dependency Inversion principle.
             PersonModel output = new PersonModel();
 
             if (ValidateName(firstName) == true)
@@ -57,15 +60,30 @@ namespace DemoLibrary.Logic
         {
             string sql = "select * from Person";
 
-            return _database.LoadData<PersonModel>(sql);
+            var output = _database.LoadData<PersonModel>(sql);
+            // Introduces a failure just for the sake of tests...
+            //foreach (var person in output)
+            //{
+            //    if (person.FirstName == "Zoli")
+            //    {
+            //        person.FirstName = "Zoltan";
+            //    }
+            //}
+
+            return output;
         }
 
         public void SavePerson(PersonModel person)
         {
             string sql = "insert into Person (FirstName, LastName, HeightInInches) " +
                 "values (@FirstName, @LastName, @HeightInInches)";
-            
-            _database.SaveData(person, sql);
+
+            /// If this for loop below is active then the 'Times.Exactly(1)' in the PersonProcessorTests would fail.
+            for (int i = 0; i < 10; i++)
+            {
+                _database.SaveData(person, sql);
+            }
+            //_database.SaveData(person, sql);
         }
 
         public void UpdatePerson(PersonModel person)
