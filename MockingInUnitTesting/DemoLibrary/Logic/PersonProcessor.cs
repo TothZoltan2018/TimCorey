@@ -79,11 +79,16 @@ namespace DemoLibrary.Logic
                 "values (@FirstName, @LastName, @HeightInInches)";
 
             /// If this for loop below is active then the 'Times.Exactly(1)' in the PersonProcessorTests would fail.
-            for (int i = 0; i < 10; i++)
-            {
-                _database.SaveData(person, sql);
-            }
-            //_database.SaveData(person, sql);
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    _database.SaveData(person, sql);
+            //}
+
+            sql = sql.Replace("@FirstName", $"'{person.FirstName}'");
+            sql = sql.Replace("@LastName", $"'{person.LastName}'");
+            sql = sql.Replace("@HeightInInches", $"{person.HeightInInches}");
+
+            _database.SaveData(person, sql);
         }
 
         public void UpdatePerson(PersonModel person)

@@ -80,7 +80,7 @@ namespace MoqDemoTests.Logic
         public void LoadPeople_ValidCall()
         {
             // AutoMock is a framework for creating fake items            
-            using (var mock = AutoMock.GetLoose())
+            using (var mock = AutoMock.GetLoose())            
             {
                 /// We mocked out the 'LoadData' method. When it is called with that sql command,
                 /// it returns the List<PersonModel> created by GetSamplePeople method.
@@ -114,12 +114,23 @@ namespace MoqDemoTests.Logic
         [Fact]
         public void SavePeople_ValidCall()
         {
-            // AutoMock is a framework for creating fake items            
             using (var mock = AutoMock.GetLoose())
+            //using (var mock = AutoMock.GetStrict())
             {
-                var person = GetSamplePeople()[0];
+                var person = new PersonModel
+                { 
+                    Id = 1,
+                    FirstName = "Zoli",
+                    LastName = "Toth",
+                    HeightInInches = 80
+                };
+
+               // string sql = "insert into Person (FirstName, LastName, HeightInInches) " +
+               //"values (@FirstName, @LastName, @HeightInInches)";
+
+                // This way of giving parameters to sql opens up the possibility for sql injection attack!
                 string sql = "insert into Person (FirstName, LastName, HeightInInches) " +
-               "values (@FirstName, @LastName, @HeightInInches)";
+                "values ('Zoli', 'Toth', 80)";
 
                 mock.Mock<ISqliteDataAccess>()
                     .Setup(x => x.SaveData(person, sql));
@@ -131,9 +142,6 @@ namespace MoqDemoTests.Logic
                 /// happened exactly onece.
                 mock.Mock<ISqliteDataAccess>()
                     .Verify(x => x.SaveData(person, sql), Times.Exactly(1));
-
-                
-  
             }
         }
 
