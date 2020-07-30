@@ -26,6 +26,9 @@ namespace DemoLibrary
         {
             HoursWorked += hours;
             //Logger log = new Logger();
+            // If we call the factory method that would still create dependency.
+            // That should be called at a central place, high level. (In Program.cs)
+            // So take it in the constructor of this class.
             _logger.Log($"Performed work on { ChoreName }");
         }
 

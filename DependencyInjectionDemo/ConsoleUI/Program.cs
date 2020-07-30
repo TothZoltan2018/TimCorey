@@ -24,7 +24,7 @@ namespace ConsoleUI
         /// 7. See in Main()
         /// 
         /// 
-        /// 
+        ///  
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
@@ -50,6 +50,7 @@ namespace ConsoleUI
                 // Run() calls the 'businessLogic.ProcessData()' method. 'businessLogic' is taken in in the constructor: 'Application(IBusinessLogic businessLogic)'
                 app.Run();
 
+                // I don't really get why we need the Application class. We can do the same without it as below:
                 var business = scope.Resolve<IBusinessLogic>();
                 business.ProcessData();
             }
