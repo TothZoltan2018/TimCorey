@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DemoLibrary
 {
-    public class Chore
+    public class Chore : IChore
     {
         private ILogger _logger;
         private IMessageSender _messageSender;
@@ -30,9 +30,9 @@ namespace DemoLibrary
         public void CompleteChore()
         {
             IsComplete = true;
-                       
+
             _logger.Log($"Completed { ChoreName }");
-            
+
             _messageSender.SendEmail(Owner, $"The chore { ChoreName } is complete.");
         }
     }

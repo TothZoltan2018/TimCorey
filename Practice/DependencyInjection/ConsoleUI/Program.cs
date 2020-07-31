@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Autofac;
 
 namespace ConsoleUI
 {
@@ -14,23 +15,27 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            Person owner = new Person
-            {
-                FirstName = "Tim",
-                LastName = "Corey",
-                EmailAddress = "tim@iamtimcorey.com",
-                PhoneNumber = "555-1212"
-            };
+            var container = AutoFacContainer.Configure();
 
-            Chore chore = new Chore
+            using (var scope = container.BeginLifetimeScope())
             {
-                ChoreName = "Take out the trash",
-                Owner = owner
-            };
+                var owner = (Person)scope.Resolve<IPerson>();
 
-            chore.PerformedWork(3);
-            chore.PerformedWork(1.5);
-            chore.CompleteChore();
+                var chore = scope.Resolve<IChore>();
+
+                owner.FirstName = "Zoli";
+                owner.LastName = "Toth";
+                owner.EmailAddress = "tz@gmail.com";
+                owner.PhoneNumber = "123456789";
+
+                chore.ChoreName = "Take out the trash";
+                chore.Owner = owner;
+
+                chore.PerformedWork(3);
+                chore.PerformedWork(1.5);
+                chore.CompleteChore();
+
+            }
 
             Console.ReadLine();
         }
