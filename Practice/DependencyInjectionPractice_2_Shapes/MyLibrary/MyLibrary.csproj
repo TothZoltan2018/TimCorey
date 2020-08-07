@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentValidation, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7de548da2fbae0f0, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentValidation.9.0.1\lib\net461\FluentValidation.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -48,10 +51,12 @@
     <Compile Include="Shapes\IShapes.cs" />
     <Compile Include="Shapes\Rectangle.cs" />
     <Compile Include="Utilities\IDataAccess.cs" />
-    <Compile Include="Utilities\IValidator.cs" />
     <Compile Include="Utilities\DataAccess..cs" />
-    <Compile Include="Utilities\Validator.cs" />
+    <Compile Include="Utilities\IMyValidator.cs" />
+    <Compile Include="Utilities\MyValidator.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

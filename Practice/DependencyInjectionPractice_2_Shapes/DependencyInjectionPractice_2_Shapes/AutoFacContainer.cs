@@ -16,13 +16,15 @@ namespace DependencyInjectionPractice_2_Shapes
         {
             var builder = new ContainerBuilder();
 
-            //builder.RegisterType<Circle>().As<ICircle>();
-            //builder.RegisterType<DataAccess>().As<IDataAccess>();
-            //builder.RegisterType<Validator>().As<IValidator>();
+            builder.RegisterType<Circle>().As<ICircle>();
+            builder.RegisterType<Rectangle>().As<IRectangle>();
+            builder.RegisterType<DataAccess>().As<IDataAccess>();
+            
+            builder.RegisterType<MyValidator>().As<IMyValidator>();
 
-            builder.RegisterAssemblyTypes(Assembly.Load(nameof(MyLibrary)))
-                //.Where(t => t.Namespace.Contains("Shapes"))
-                .As(t => t.GetInterfaces().FirstOrDefault(i => i.Name == "I" + t.Name));
+            //builder.RegisterAssemblyTypes(Assembly.Load(nameof(MyLibrary)))
+            //    //.Where(t => t.Namespace.Contains("Shapes"))
+            //    .As(t => t.GetInterfaces().FirstOrDefault(i => i.Name == "I" + t.Name));
 
 
             return builder.Build();

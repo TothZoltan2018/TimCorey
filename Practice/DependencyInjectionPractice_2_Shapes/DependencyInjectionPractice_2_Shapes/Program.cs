@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using MyLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,6 @@ namespace DependencyInjectionPractice_2_Shapes
 
                 rectangle.CalculateArea();
                 rectangle.CalculatePerimeter();
-
             }
 
             Console.ReadLine();

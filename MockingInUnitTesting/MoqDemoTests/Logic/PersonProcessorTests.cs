@@ -88,7 +88,7 @@ namespace MoqDemoTests.Logic
                     .Setup(x => x.LoadData<PersonModel>("select * from Person"))
                     .Returns(GetSamplePeople());
                 /// cls: the class we are testing. When this 'PersonProcessor' type class asks for 'ISqliteDataAccess',
-                /// it wiil not gi e back 'SqliteDataAccess' but it gives back the above mocked version. 
+                /// it wiil not give back 'SqliteDataAccess' but it gives back the above mocked version. 
                 /// (With only one method ('LoadData') out of three.)
                 /// I think, the only requirement for passing the first two tests is, that sql command must mach here and
                 /// in the 'PersonProcessor.Load()' method. It can be even absolutely nonsense string literal.

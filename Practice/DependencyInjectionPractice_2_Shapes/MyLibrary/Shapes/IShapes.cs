@@ -6,16 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MyLibrary.Shapes
-{    
-    public interface IShapes// : ICalculator
+{
+    public interface IShapes
     {
-        //double Area { get; set; }
-        //double Perimeter { get; set; }
-
-        //void Process();
-
         void CalculateArea();
 
         void CalculatePerimeter();
+ 
     }
 }
