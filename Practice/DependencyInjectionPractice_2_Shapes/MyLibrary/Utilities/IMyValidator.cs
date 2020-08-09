@@ -2,6 +2,6 @@
 {
     public interface IMyValidator
     {
-        double GetNumberFromString();
+        double GetNumberFromString(string inputdata);
     }
 }

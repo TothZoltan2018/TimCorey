@@ -10,10 +10,9 @@ namespace MyLibrary.Utilities
     public class MyValidator : AbstractValidator<string>, IMyValidator
     {
         IDataAccess _dataAccess;
-        public MyValidator(IDataAccess dataAccess)
+        public MyValidator(IDataAccess dataAcces)
         {
-            _dataAccess = dataAccess;
-
+            _dataAccess = dataAcces;
             RuleFor(d => d).Length(1, 20).WithMessage("Please enter a number between 1 and 20 character long")
             .Must(BeAValidNumber).WithMessage("Please enter a valid number")
             .Must(BePositiveNumber).WithMessage("Please enter a positive number");
@@ -38,22 +37,20 @@ namespace MyLibrary.Utilities
 
             return doubleParsed > 0;
         }
-
-        public double GetNumberFromString()
+        public double GetNumberFromString(string inputData)
         {
-            bool isParsed;
-            string inputData;
-            do
+            var result = this.Validate(inputData);
+
+            while (result.IsValid == false)
             {
-                inputData = _dataAccess.ReadIn();
-                var result = this.Validate(inputData);
                 for (int i = 0; i < result.Errors.Count; i++)
                 {
                     _dataAccess.WriteOut(result.Errors[i].ErrorMessage);
                 }
 
-                isParsed = result.IsValid;
-            } while (isParsed == false);
+                inputData = _dataAccess.ReadIn();
+                result = this.Validate(inputData);
+            } 
 
             return double.Parse(inputData);
         }

@@ -9,9 +9,8 @@ namespace MyLibrary.Shapes
 {
     public interface IShapes
     {
-        void CalculateArea();
-
-        void CalculatePerimeter();
+        double CalculateArea();
+        double CalculatePerimeter();
  
     }
 }

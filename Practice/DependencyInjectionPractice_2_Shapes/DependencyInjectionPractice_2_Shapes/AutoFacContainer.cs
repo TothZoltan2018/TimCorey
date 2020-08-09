@@ -16,6 +16,7 @@ namespace DependencyInjectionPractice_2_Shapes
         {
             var builder = new ContainerBuilder();
 
+            builder.RegisterType<IShapes>().As<IShapes>();
             builder.RegisterType<Circle>().As<ICircle>();
             builder.RegisterType<Rectangle>().As<IRectangle>();
             builder.RegisterType<DataAccess>().As<IDataAccess>();

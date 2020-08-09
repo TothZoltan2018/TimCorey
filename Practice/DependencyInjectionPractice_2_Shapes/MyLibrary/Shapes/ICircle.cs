@@ -1,8 +1,9 @@
 ﻿namespace MyLibrary.Shapes
 {
-    public interface ICircle
+    public interface ICircle : IShapes
     {
-        void CalculateArea();
-        void CalculatePerimeter();
+        double Radius { get; set; }
+        //double CalculateArea();
+        //double CalculatePerimeter();
     }
 }

@@ -8,28 +8,22 @@ using System.Threading.Tasks;
 namespace MyLibrary.Shapes
 {
     public class Circle : IShapes, ICircle
-    {        
-        IDataAccess _dataAccess;
-        IMyValidator _myvalidator;
-        double _radius;
+    {
+        public double Radius { get; set; }
 
-        public Circle(IDataAccess dataAccess, IMyValidator myvalidator)
-        {     
-            _dataAccess = dataAccess;
-            _myvalidator = myvalidator;
-
-            dataAccess.WriteOut($"Please enter the radius of the {nameof(Circle)}:");
-            _radius = _myvalidator.GetNumberFromString();
-        }
-
-        public void CalculateArea()
-        { 
-            _dataAccess.WriteOut($"The Area of the {nameof(Circle)} is: { _radius * _radius * Math.PI}");
-        }
-
-        public void CalculatePerimeter()
+        public Circle(double radius)
         {
-            _dataAccess.WriteOut($"The Perimeter of the {nameof(Circle)} is: { 2 * _radius * Math.PI}");
+            Radius = radius;
+        }
+
+        public double CalculateArea()
+        { 
+           return Radius * Radius * Math.PI;
+        }
+
+        public double CalculatePerimeter()
+        {
+            return 2 * Radius * Math.PI;
         }
     }
 }

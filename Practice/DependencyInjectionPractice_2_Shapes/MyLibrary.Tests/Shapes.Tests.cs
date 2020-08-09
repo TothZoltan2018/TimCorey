@@ -9,18 +9,51 @@ using MyLibrary.Shapes;
 
 namespace MyLibrary.Tests
 {
-    // The Shape classes cannot be tested. Needs to be reworked so that
-    // they not write results out but return value.
     public class Shapes
     {        
         [Theory]
         [InlineData(3, 4, 12)]
-        public void RectangleArea(double sideA, double sideB, double Area)
+        public void CalculateArea_Rectangle(double sideA, double sideB, double expexted)
         {
-            Rectangle rectangle = new Rectangle(null, null);
+            Rectangle rectangle = new Rectangle(sideA, sideB);
 
-            rectangle.CalculateArea();
-            
+            double actual = rectangle.CalculateArea();
+
+            Assert.Equal(expexted, actual);
         }
+
+        [Theory]
+        [InlineData(3, Math.PI * 3 * 3)]
+        public void CalculateArea_Circle(double radius, double expexted)
+        {
+            Circle circle = new Circle(radius);
+
+            double actual = circle.CalculateArea();
+
+            Assert.Equal(expexted, actual);
+        }
+
+        [Theory]
+        [InlineData(3, 4, 14)]
+        public void CalculatePerimeter_Rectangle(double sideA, double sideB, double expexted)
+        {
+            Rectangle rectangle = new Rectangle(sideA, sideB);
+
+            double actual = rectangle.CalculatePerimeter();
+
+            Assert.Equal(expexted, actual);
+        }
+
+        [Theory]
+        [InlineData(3, Math.PI * 3 * 2)]
+        public void CalculatePerimeter_Circle(double radius, double expexted)
+        {
+            Circle circle = new Circle(radius);
+
+            double actual = circle.CalculatePerimeter();
+
+            Assert.Equal(expexted, actual);
+        }
+
     }
 }

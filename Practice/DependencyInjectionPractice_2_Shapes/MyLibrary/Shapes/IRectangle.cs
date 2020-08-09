@@ -1,8 +1,10 @@
 ﻿namespace MyLibrary.Shapes
 {
-    public interface IRectangle
+    public interface IRectangle : IShapes
     {
-        void CalculateArea();
-        void CalculatePerimeter();
+        double SideA { get; set; }
+        double SideB { get; set; }
+        //double CalculateArea();
+        //double CalculatePerimeter();
     }
 }

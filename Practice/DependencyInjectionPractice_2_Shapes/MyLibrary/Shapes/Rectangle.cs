@@ -8,34 +8,25 @@ using System.Threading.Tasks;
 namespace MyLibrary.Shapes
 {
     public class Rectangle : IShapes, IRectangle
-    {        
-        private IDataAccess _dataAccess;
-        IMyValidator _myvalidator;
+    {
+        public double SideA { get; set; }
+        public double SideB { get; set; }
 
-        private double _sideA;
-        private double _sideB;
-
-        public Rectangle(IDataAccess dataAccess, IMyValidator myvalidator)
-        {           
-            _dataAccess = dataAccess;
-            _myvalidator = myvalidator;
-
-            dataAccess.WriteOut($"Please enter one side of the {nameof(Rectangle)}:");
-            _sideA = _myvalidator.GetNumberFromString();
-
-            dataAccess.WriteOut($"Please enter the other side of the {nameof(Rectangle)}:");
-            _sideB = _myvalidator.GetNumberFromString();
+        public Rectangle(double sideA, double sideB)
+        {
+            SideA = sideA;
+            SideB = sideB;            
         }
 
 
-        public void CalculateArea()
+        public double CalculateArea()
         {
-            _dataAccess.WriteOut($"The Area of the {nameof(Rectangle)} is: { _sideA * _sideB}");
+            return SideA * SideB;
         }
 
-        public void CalculatePerimeter()
+        public double CalculatePerimeter()
         {
-            _dataAccess.WriteOut($"The Area of the {nameof(Rectangle)} is: { 2 * (_sideA + _sideB)}");
+            return 2 * (SideA + SideB);
         }
 
         //private double GetNumberFromString()
