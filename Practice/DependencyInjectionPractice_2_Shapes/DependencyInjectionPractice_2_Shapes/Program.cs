@@ -47,8 +47,8 @@ namespace DependencyInjectionPractice_2_Shapes
 
         private static void PrintoutCalculationResults(IDataAccess dataAccess, IShapes shape, double area, double perimeter)
         {
-            dataAccess.WriteOut($"The Area of the {nameof(shape)} is: {area}");
-            dataAccess.WriteOut($"The Perimeter of the {nameof(shape)} is: {perimeter}");
+            dataAccess.WriteOut($"The Area of the {shape.GetType().Name} is: {area}");
+            dataAccess.WriteOut($"The Perimeter of the {shape.GetType().Name} is: {perimeter}");
         }
 
         //private static void PrintoutForInputtingData(IDataAccess dataAccess, string shape)
