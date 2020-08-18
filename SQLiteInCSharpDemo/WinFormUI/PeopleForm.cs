@@ -14,7 +14,7 @@ namespace WinFormUI
     /// <summary>
     /// 1. I installed SQLLiteBrowser in WIndows and created an DemoDB Database and 
     /// an empty Person DB Table under path of our WinFormUI directory.
-    /// 2. In the FileExplorer I included the DemoDB.db into the project.
+    /// 2. In the Solution Explorer I included the DemoDB.db into the project.
     /// 3. Right click on DemoDB.db --> Properties --> Build Action: Content, 
     /// Copy to Output directory: Copy if newer (copy it to the bin directory if we change this file)
     /// 4. In the App.config fill out the connectionString.
@@ -22,7 +22,7 @@ namespace WinFormUI
     /// 6. Install System.Data.SQLite.Core nuget package for WinFormUI, too. 
     /// 7. Right click on DemoLibrary's References --> Add new Reference in Assemblies: System.Configuration of the WinFormUI. 
     /// This allows to talk to App.config. We also need to add: 'using System.Configuration;' in SqliteDataAccess.cs
-    /// 8. We nned to add 'using System.Data;' in SqliteDataAccess.cs, 'using System.Data.SQLite;', 'using Dapper;'
+    /// 8. We need to add 'using System.Data;' in SqliteDataAccess.cs, 'using System.Data.SQLite;', 'using Dapper;'
     /// 
     /// </summary>
     public partial class PeopleForm : Form
