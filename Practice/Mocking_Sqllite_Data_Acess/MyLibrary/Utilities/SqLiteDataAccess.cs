@@ -3,9 +3,10 @@ using System.Data;
 using System.Data.SQLite;
 using System.Linq;
 using Dapper;
+using System.IO;
 
 namespace MyLibrary
-{
+{    
     public class SqLiteDataAccess : ISqLiteDataAccess
     {
         public string DBName { get; set; }
@@ -17,7 +18,10 @@ namespace MyLibrary
         }
         public void CreateDB()
         {
-            SQLiteConnection.CreateFile(DBName);
+            if (File.Exists(DBName) == false)
+            {
+                SQLiteConnection.CreateFile(DBName);
+            }            
         }
 
         //Does not work

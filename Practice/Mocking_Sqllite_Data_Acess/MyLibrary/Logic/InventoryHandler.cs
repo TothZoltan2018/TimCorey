@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using MyLibrary.Models;
@@ -19,17 +20,38 @@ namespace MyLibrary.Logic
 
         public void CreateDBAndTables()
         {
-            if (File.Exists(_dataAccess.DBName) == false)
-            {
+            //if (File.Exists(_dataAccess.DBName) == false)
+            //{
                 _dataAccess.CreateDB();
                 _dataAccess.CreateDBTables();
-            }
+            //}
         }
 
         public void DeleteDB()
         {
-           File.Delete(_dataAccess.DBName);
-        
+           File.Delete(_dataAccess.DBName);        
+        }
+
+        public T CreateModel<T>() where T : new()
+        {
+            T model = new T();
+            object value = null;
+            PropertyInfo[] propertyInfos = model.GetType().GetProperties();
+
+            for (int i = 0; i < propertyInfos.Length; i++)
+            {
+                //Id should not be read because that is not pushed to the DB hence that is autoincremented
+                if (i > 0)
+                {
+                    Console.WriteLine($"Please enter {propertyInfos[i].Name}:");
+                    value = Console.ReadLine();
+                    // Todo: Fluent validation should check the values
+
+                    propertyInfos[i].SetValue(model, Convert.ChangeType(value, propertyInfos[i].PropertyType));
+                }
+            }
+
+            return model;
         }
 
         public void SaveModel<T>(T model)
