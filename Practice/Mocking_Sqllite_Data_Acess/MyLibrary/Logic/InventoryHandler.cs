@@ -50,7 +50,7 @@ namespace MyLibrary.Logic
             T model = new T();
             object value = null;
             PropertyInfo[] propertyInfos = model.GetType().GetProperties();
-            string retry = "n";
+            string retry;
 
             ValidationResult validation = null;
 
@@ -101,6 +101,7 @@ namespace MyLibrary.Logic
                 }
 
                 // Error handling. Perhaps it should be moved to a function
+                retry = "n";
                 if (validation.IsValid == false)
                 {
                     foreach (var error in validation.Errors)
@@ -113,7 +114,7 @@ namespace MyLibrary.Logic
                     retry = _userInterface.ReadInFromUser().ToString().ToLower();                    
                 }
 
-            } while (retry == "Y");
+            } while (retry == "y");
 
             return (model, validation.IsValid);
         }

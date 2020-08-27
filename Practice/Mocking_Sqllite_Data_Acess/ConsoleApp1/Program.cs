@@ -52,32 +52,12 @@ namespace ConsoleApp1
                         DisplayDBTable<List<ProductModel>>(inventoryHandler.LoadModel<ProductModel>(product));
                         break;
                     case "3":
-                        var ValidatedProductCategory = inventoryHandler.CreateModel<ProductCategoryModel>();
-                        if (ValidatedProductCategory.Item2 == true)
-                        {
-                            inventoryHandler.SaveModel<ProductCategoryModel>(ValidatedProductCategory.Item1);
-                            Console.WriteLine("Model is created and it is saved to database.");
-                        }
-                        else 
-                        {
-                            Console.WriteLine("Invalid model created and it is not saved to database.");
-                        }
-                        
+                        (ProductCategoryModel, bool) ValidatedProductCategory = inventoryHandler.CreateModel<ProductCategoryModel>();
+                        SaveOnlyIfValidModel(inventoryHandler, ValidatedProductCategory);
                         break;
                     case "4":                        
-                        var ValidatedProduct = inventoryHandler.CreateModel<ProductModel>();
-                        
-                        // Todo this might be in generic method.
-                        if (ValidatedProduct.Item2 == true)
-                        {
-                            inventoryHandler.SaveModel<ProductModel>(ValidatedProduct.Item1);
-                            Console.WriteLine("Model is created and it is saved to database.");
-                        }
-                        else
-                        {
-                            Console.WriteLine("Invalid model created and it is not saved to database.");
-                        }
-                        
+                        (ProductModel, bool) ValidatedProduct = inventoryHandler.CreateModel<ProductModel>();
+                        SaveOnlyIfValidModel(inventoryHandler, ValidatedProduct);
                         break;
                     case "5":
                         DeleteDataBase(inventoryHandler, "Are you sure to delete all data? (y/n)");                        
@@ -93,6 +73,19 @@ namespace ConsoleApp1
                 Console.ReadLine();
 
             } while (choice != "6");
+        }
+                
+        private static void SaveOnlyIfValidModel<T>(InventoryHandler inventoryHandler, (T, bool) ValidatedModel)
+        {
+            if (ValidatedModel.Item2 == true)
+            {
+                inventoryHandler.SaveModel<T>(ValidatedModel.Item1);
+                Console.WriteLine($"{ValidatedModel.Item1.GetType().Name} is created and it is saved to database.");
+            }
+            else
+            {
+                Console.WriteLine($"Invalid {ValidatedModel.Item1.GetType().Name} created and it is NOT saved to database.");
+            }
         }
 
         private static void DeleteDataBase(InventoryHandler inventoryHandler, string question)
@@ -127,7 +120,9 @@ namespace ConsoleApp1
                 {                    
                     // ################## Wow! #####################
                     Console.WriteLine($"{propertyInfoArr[i].Name}: {propertyInfoArr[i].GetValue(item)}");
-                } 
+                }
+
+                Console.WriteLine();
             }            
         }
 
