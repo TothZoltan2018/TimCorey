@@ -11,7 +11,7 @@ using MyLibrary.Utilities;
 
 namespace MyLibrary.Logic
 {
-    public class InventoryHandler
+    public class InventoryHandler : IInventoryHandler
     {
         private ISqLiteDataAccess _dataAccess;
         private IProductCategoryValidator _productCategoryValidator;
@@ -30,14 +30,14 @@ namespace MyLibrary.Logic
         {
             //if (File.Exists(_dataAccess.DBName) == false)
             //{
-                _dataAccess.CreateDB();
-                _dataAccess.CreateDBTables();
+            _dataAccess.CreateDB();
+            _dataAccess.CreateDBTables();
             //}
         }
 
         public void DeleteDB()
         {
-           File.Delete(_dataAccess.DBName);        
+            File.Delete(_dataAccess.DBName);
         }
 
         /// <summary>
@@ -46,9 +46,8 @@ namespace MyLibrary.Logic
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public (T, bool) CreateModel<T>() where T : new()
-        {            
-            T model = new T();
-            object value = null;
+        {
+            T model = new T();            
             PropertyInfo[] propertyInfos = model.GetType().GetProperties();
             string retry;
 
@@ -58,38 +57,20 @@ namespace MyLibrary.Logic
             {
                 for (int i = 0; i < propertyInfos.Length; i++)
                 {
-                    //Id should not be read because that is not pushed to the DB hence that is autoincremented
+                    //Id should not be read because that is not pushed to the DB hence that is autoincremented                    
                     if (i > 0)
                     {
                         _userInterface.WriteOutToUser($"Please enter {propertyInfos[i].Name}:");
-                        value = _userInterface.ReadInFromUser();
 
-                        try
+                        if (SetForeignKeyProperty(model, propertyInfos[i]) == false)
                         {
-                            propertyInfos[i].SetValue(model, Convert.ChangeType(value, propertyInfos[i].PropertyType));
-                        }
-                        catch (FormatException e)
-                        {
-                            _userInterface.WriteOutToUser($"{e.Message}. Please enter {propertyInfos[i].Name} again in correct format.");
-                            i--;
-                            continue;
-                        }
+                            if (SetPropertyValue(model, propertyInfos[i]) == false)
+                            {
+                                i--;
+                            }
+                        }  
                     }
                 }
-                //// Todo: Fluent validation should check the values. It checks the whole class, not one by one, which is not the most user friendly   
-
-
-                //if (_myValidator.GetType() == typeof(ProductCategoryValidator))
-                //{
-                //    //_myValidator.GetClass().Validate(model as ProductCategoryModel);
-                //}
-                //else if (_myValidator.GetType() == typeof(ProductValidator))
-                //{
-                //    //_myValidator.GetClass().Validate(model as ProductModel);//(Convert.ChangeType(model, ));
-                //    (_myValidator as ProductValidator).GetClass().Validate(model as ProductModel); ;
-                //    //.Validate(model as ProductModel);//(Convert.ChangeType(model, ));
-                //}
-
 
                 if (model.GetType() == typeof(ProductCategoryModel))
                 {
@@ -111,12 +92,107 @@ namespace MyLibrary.Logic
 
                     _userInterface.WriteOutToUser("Please enter valid values or skip creating new entry!");
                     _userInterface.WriteOutToUser("Do you want to retry? Y/N");
-                    retry = _userInterface.ReadInFromUser().ToString().ToLower();                    
+                    retry = _userInterface.ReadInFromUser().ToString().ToLower();
                 }
 
             } while (retry == "y");
 
             return (model, validation.IsValid);
+        }
+
+        private bool SetPropertyValue<T>(T model, PropertyInfo propertyInfo) where T : new()
+        {
+            bool isSuccessFul = false;
+            object value = _userInterface.ReadInFromUser();
+            try
+            {
+                propertyInfo.SetValue(model, Convert.ChangeType(value, propertyInfo.PropertyType));
+                isSuccessFul = true;
+            }
+            catch (FormatException e)
+            {
+                _userInterface.WriteOutToUser($"{e.Message}. Please enter {propertyInfo.Name} again in correct format.");                
+            }
+
+            return isSuccessFul;
+        }
+
+        /// <summary>
+        /// Checks if a property is a foreign key reference to an other table. If so, then it displays the values of that table and prompts
+        /// the user to set the Id value. Only values present in the foreign key table are accepted.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="model"> T type class which might contain a property which is an foreign key</param>
+        /// <param name="PropertyInfoOfModel">The property which is checked to be foreign key Id</param>
+        /// <returns></returns>
+        private bool SetForeignKeyProperty<T>(T model, PropertyInfo PropertyInfoOfModel) where T : new()
+        {
+            bool isForeignKeyProperty = false;            
+            string propName = PropertyInfoOfModel.Name;
+           
+            //Checking for Foreign key
+            if (propName.EndsWith("Id"))
+            {
+                isForeignKeyProperty = true;
+                string modelName = propName.Replace("Id", "Model");
+                var modelContainsForeignKey = Activator.CreateInstance("MyLibrary", $"MyLibrary.Models.{modelName}").Unwrap();
+
+                _userInterface.WriteOutToUser("Please select an Id from the List below:");
+                switch (modelName)
+                {
+                    case "ProductCategoryModel":
+                        var productCategoryTable = LoadModel<ProductCategoryModel>((ProductCategoryModel)modelContainsForeignKey);
+
+                        DisplayTable<ProductCategoryModel>(productCategoryTable);                        
+                        SelectOnlyFromList<ProductCategoryModel, T>(productCategoryTable, model, PropertyInfoOfModel);
+
+                        break;
+                    //Put here other tables which are foreign key for some table.
+                    //case "": 
+                        //break;
+                    default:
+                        break;
+                }
+            }
+            return isForeignKeyProperty;
+        }
+                
+        private void SelectOnlyFromList<ForeinKeyModel, Model>(List<ForeinKeyModel> foreignKeyTable, Model model, PropertyInfo propertyInfo) where ForeinKeyModel: new() where Model: new()
+        {
+            
+            string foreignKeyModelId = foreignKeyTable[0].GetType().GetProperties()[0].Name;
+            _userInterface.WriteOutToUser("Please select an Id from the list");
+                        
+            while (SetPropertyValue<Model>(model, propertyInfo) == false);
+
+            do
+            {
+                foreach (var item in foreignKeyTable)
+                {
+                    if (item.GetType().GetProperty(foreignKeyModelId).GetValue(item).Equals(model.GetType().GetProperty(propertyInfo.Name).GetValue(model)))
+                    {
+                        // Successfully set Id: It is in the foreign key table
+                        _userInterface.WriteOutToUser($"{propertyInfo.Name} was set successfully");
+                        return;
+                    }
+                }
+
+                _userInterface.WriteOutToUser($"{propertyInfo.Name} was NOT set successfully. Please choose a value from the list");
+                while (SetPropertyValue<Model>(model, propertyInfo) == false) ;
+
+            } while (true);
+        }
+
+        public void DisplayTable<M>(List<M> modelTable) //where T : class, IEnumerable, new()
+        {            
+            foreach (var row in modelTable)
+            {
+                var pi = row.GetType().GetProperties();
+                for (int j = 0; j < pi.Length; j++)
+                {
+                    _userInterface.WriteOutToUser($"{pi[j].Name}: {pi[j].GetValue(row)}");
+                }
+            }
         }
 
         public void SaveModel<T>(T model)
@@ -130,39 +206,33 @@ namespace MyLibrary.Logic
 
             if (GetDBTableName<T>(model) == "Product")
             {
-                sql = "INSERT INTO Product (ProductName, [Description], ProdCategoryId, BestBefore, Quantity, Unit)" +
-                    " VALUES (@ProductName, @Description, @ProdCategoryId, @BestBefore, @Quantity, @Unit)";
+                sql = "INSERT INTO Product (ProductName, [Description], ProductCategoryId, BestBefore, Quantity, Unit)" +
+                    " VALUES (@ProductName, @Description, @ProductCategoryId, @BestBefore, @Quantity, @Unit)";
             }
-
-            //ProductCategoryModel productCategory = model as ProductCategoryModel;
-            //if (productCategory != null)
-            //{
-            //    sql = "INSERT INTO ProductCategory (ProductCategoryName) VALUES (@ProductCategoryName)";
-            //}
-
-            //ProductModel product = model as ProductModel;
-            //if (product != null)
-            //{
-            //    sql = "INSERT INTO Product (ProductName, [Description], ProdCategoryId, BestBefore, Quantity, Unit)" +
-            //        " VALUES (@ProductName, @Description, @ProdCategoryId, @BestBefore, @Quantity, @Unit)";
-            //}
 
             _dataAccess.SaveData(model, sql);
         }
 
         public List<T> LoadModel<T>(T model)
         {
-            string tableName = GetDBTableName<T>(model);
+            List<T> tableOfModel = new List<T>();
 
-            string sql = $"SELECT * FROM {tableName}";
+            if (File.Exists(_dataAccess.DBName) == true)
+            {
+                string tableName = GetDBTableName<T>(model);
 
-            return _dataAccess.LoadData<T>(sql);
+                string sql = $"SELECT * FROM {tableName}";
+
+                tableOfModel = _dataAccess.LoadData<T>(sql);
+            }
+
+            return tableOfModel;
         }
 
         public string GetDBTableName<T>(T model)
         {
             string tablelName = model.GetType().Name.Replace("Model", "");
-            
+
             return tablelName;
         }
     }

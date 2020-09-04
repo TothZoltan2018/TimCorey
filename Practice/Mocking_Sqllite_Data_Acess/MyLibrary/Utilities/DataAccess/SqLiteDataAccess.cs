@@ -64,13 +64,13 @@ namespace MyLibrary
                     "ProductId INTEGER NOT NULL, " +
                     "ProductName NVARCHAR(50) NOT NULL, " +
                     "[Description] NVARCHAR(50), " +
-                    "ProdCategoryId INTEGER NOT NULL, " +
+                    "ProductCategoryId INTEGER NOT NULL, " +
                     //"BestBefore DATETIME NOT NULL DEFAULT(GETDATE()), " +
                     "BestBefore DATETIME NOT NULL, " +
                     "Quantity FLOAT NOT NULL DEFAULT(1), " +
                     "Unit NVARCHAR(15), " +
                     "PRIMARY KEY(ProductId AUTOINCREMENT), " +
-                    "FOREIGN KEY (ProdCategoryId) REFERENCES ProdCategory(ProdCategoryId));";
+                    "FOREIGN KEY (ProductCategoryId) REFERENCES ProductCategory(ProductCategoryId));";
                 dBConn.Execute(sqlCommand);
             }
         }

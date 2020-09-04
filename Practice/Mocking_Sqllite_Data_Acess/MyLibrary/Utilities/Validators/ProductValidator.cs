@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FluentValidation;
 using MyLibrary.Models;
 using System.Reflection;
+using MyLibrary.Logic;
 
 namespace MyLibrary.Utilities
 {
@@ -31,6 +32,8 @@ namespace MyLibrary.Utilities
             RuleFor(p => p.BestBefore).GreaterThanOrEqualTo(DateTime.Today).WithMessage("Please enter a DateTime value which is in the future.");
 
             // Todo for other properties, too.
+
+            //TODO productcategoryId should not be asked for. Instead productcategoryName but from the list read back from DB.
         }
 
         public ProductValidator GetClass()

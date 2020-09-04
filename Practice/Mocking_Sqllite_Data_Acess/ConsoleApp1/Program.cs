@@ -31,7 +31,7 @@ namespace ConsoleApp1
 
             IUserInterface userInterface = new UserInterface();
 
-            InventoryHandler inventoryHandler = new InventoryHandler(sqLiteDataAccess, productCategoryValidator, productValidator, userInterface);
+            IInventoryHandler inventoryHandler = new InventoryHandler(sqLiteDataAccess, productCategoryValidator, productValidator, userInterface);
 
             inventoryHandler.CreateDBAndTables();
  
@@ -46,21 +46,31 @@ namespace ConsoleApp1
                 switch (choice)
                 {
                     case "1":
-                        DisplayDBTable<List<ProductCategoryModel>>(inventoryHandler.LoadModel<ProductCategoryModel>(productCategory));
+                        inventoryHandler.DisplayTable<ProductCategoryModel>(inventoryHandler.LoadModel<ProductCategoryModel>(productCategory));
+                       //DisplayDBTable<List<ProductCategoryModel>>(inventoryHandler.LoadModel<ProductCategoryModel>(productCategory));
                         break;
                     case "2":
-                        DisplayDBTable<List<ProductModel>>(inventoryHandler.LoadModel<ProductModel>(product));
+                        inventoryHandler.DisplayTable<ProductModel>(inventoryHandler.LoadModel<ProductModel>(product));
+                        //DisplayDBTable<List<ProductModel>>(inventoryHandler.LoadModel<ProductModel>(product));
                         break;
                     case "3":
                         (ProductCategoryModel, bool) ValidatedProductCategory = inventoryHandler.CreateModel<ProductCategoryModel>();
-                        SaveOnlyIfValidModel(inventoryHandler, ValidatedProductCategory);
+                        SaveOnlyIfValidModel((InventoryHandler)inventoryHandler, ValidatedProductCategory);
                         break;
-                    case "4":                        
+                    case "4":
+                        ///ToDO: let pass in the productcategories to check if the new prodcategoryid or name is in the list
+                        ///For console UI extra validation is needed because user can enter anything which might not be in database
+                        ///In WPF a combobox can only contains values which is loaded from database.
+                        //Console.WriteLine("Please choose one id from the list below:");
+                        //DisplayDBTable<List<ProductCategoryModel>>(inventoryHandler.LoadModel<ProductCategoryModel>(productCategory));
+
+
                         (ProductModel, bool) ValidatedProduct = inventoryHandler.CreateModel<ProductModel>();
-                        SaveOnlyIfValidModel(inventoryHandler, ValidatedProduct);
+
+                        SaveOnlyIfValidModel((InventoryHandler)inventoryHandler, ValidatedProduct);
                         break;
                     case "5":
-                        DeleteDataBase(inventoryHandler, "Are you sure to delete all data? (y/n)");                        
+                        DeleteDataBase((InventoryHandler)inventoryHandler, "Are you sure to delete all data? (y/n)");                        
                         break;
                     case "6":
                         Console.WriteLine("Thanks for using this application");
