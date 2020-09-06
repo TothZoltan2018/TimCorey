@@ -120,6 +120,7 @@ namespace MyLibrary.Logic
         /// <summary>
         /// Checks if a property is a foreign key reference to an other table. If so, then it displays the values of that table and prompts
         /// the user to set the Id value. Only values present in the foreign key table are accepted.
+        /// If a foreign key table does not exist then its Id is set to -99
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="model"> T type class which might contain a property which is an foreign key</param>
@@ -142,9 +143,14 @@ namespace MyLibrary.Logic
                 {
                     case "ProductCategoryModel":
                         var productCategoryTable = LoadModel<ProductCategoryModel>((ProductCategoryModel)modelContainsForeignKey);
-
+                        // Todo Perhaps here should we check for length 
+                        //if (productCategoryTable.Count == 0)
+                        //{
+                        //    PropertyInfoOfModel.SetValue(model, -99);
+                        //}
+                                                
                         DisplayTable<ProductCategoryModel>(productCategoryTable);                        
-                        SelectOnlyFromList<ProductCategoryModel, T>(productCategoryTable, model, PropertyInfoOfModel);
+                        SetForeignKeyValueFromForeignKeyTable<ProductCategoryModel, T>(productCategoryTable, model, PropertyInfoOfModel);
 
                         break;
                     //Put here other tables which are foreign key for some table.
@@ -157,30 +163,37 @@ namespace MyLibrary.Logic
             return isForeignKeyProperty;
         }
                 
-        private void SelectOnlyFromList<ForeinKeyModel, Model>(List<ForeinKeyModel> foreignKeyTable, Model model, PropertyInfo propertyInfo) where ForeinKeyModel: new() where Model: new()
+        private void SetForeignKeyValueFromForeignKeyTable<ForeinKeyModel, Model>(List<ForeinKeyModel> foreignKeyTable, Model model, PropertyInfo propertyInfo) where ForeinKeyModel: new() where Model: new()
         {
-            
-            string foreignKeyModelId = foreignKeyTable[0].GetType().GetProperties()[0].Name;
-            _userInterface.WriteOutToUser("Please select an Id from the list");
-                        
-            while (SetPropertyValue<Model>(model, propertyInfo) == false);
-
-            do
+            if (foreignKeyTable.Count != 0)
             {
-                foreach (var item in foreignKeyTable)
-                {
-                    if (item.GetType().GetProperty(foreignKeyModelId).GetValue(item).Equals(model.GetType().GetProperty(propertyInfo.Name).GetValue(model)))
-                    {
-                        // Successfully set Id: It is in the foreign key table
-                        _userInterface.WriteOutToUser($"{propertyInfo.Name} was set successfully");
-                        return;
-                    }
-                }
+                string foreignKeyModelId = foreignKeyTable[0].GetType().GetProperties()[0].Name;
+                _userInterface.WriteOutToUser("Please select an Id from the list");
 
-                _userInterface.WriteOutToUser($"{propertyInfo.Name} was NOT set successfully. Please choose a value from the list");
                 while (SetPropertyValue<Model>(model, propertyInfo) == false) ;
 
-            } while (true);
+                do
+                {
+                    foreach (var item in foreignKeyTable)
+                    {
+                        if (item.GetType().GetProperty(foreignKeyModelId).GetValue(item).Equals(model.GetType().GetProperty(propertyInfo.Name).GetValue(model)))
+                        {
+                            // Successfully set Id: It is in the foreign key table
+                            _userInterface.WriteOutToUser($"{propertyInfo.Name} was set successfully");
+                            return;
+                        }
+                    }
+
+                    _userInterface.WriteOutToUser($"{propertyInfo.Name} was NOT set successfully. Please choose a value from the list");
+                    while (SetPropertyValue<Model>(model, propertyInfo) == false) ;
+
+                } while (true);
+            }
+            // If a foreign key table does not exist then its Id is set to -99. ProductValidator is prepared to fail with this value.
+            else
+            {
+                model.GetType().GetProperty(propertyInfo.Name).SetValue(model, -99);                
+            }
         }
 
         public void DisplayTable<M>(List<M> modelTable) //where T : class, IEnumerable, new()

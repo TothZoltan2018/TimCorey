@@ -31,9 +31,10 @@ namespace MyLibrary.Utilities
 
             RuleFor(p => p.BestBefore).GreaterThanOrEqualTo(DateTime.Today).WithMessage("Please enter a DateTime value which is in the future.");
 
-            // Todo for other properties, too.
-
-            //TODO productcategoryId should not be asked for. Instead productcategoryName but from the list read back from DB.
+            // ProductCategoryId is et to -99 if ProductCategoryTable does not esist.
+            RuleFor(p => p.ProductCategoryId).GreaterThan(0).WithMessage($"ProductCategoryId is 0 or negative. ProductCategory table is empty. Please create entries first.");
+            
+            // Todo for other properties, too.            
         }
 
         public ProductValidator GetClass()
