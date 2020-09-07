@@ -7,7 +7,7 @@ using FluentValidation;
 using MyLibrary.Models;
 using System.Reflection;
 
-namespace MyLibrary.Utilities
+namespace MyLibrary.Utilities.Validators
 {
     //class Validator : AbstractValidator<T> 
     public class ProductCategoryValidator : AbstractValidator<ProductCategoryModel>, IProductCategoryValidator

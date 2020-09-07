@@ -8,7 +8,7 @@ using MyLibrary.Models;
 using System.Reflection;
 using MyLibrary.Logic;
 
-namespace MyLibrary.Utilities
+namespace MyLibrary.Utilities.Validators
 {
     public class ProductValidator : AbstractValidator<ProductModel>, IProductValidator
     {

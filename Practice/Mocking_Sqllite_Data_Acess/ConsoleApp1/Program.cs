@@ -2,6 +2,8 @@
 using MyLibrary.Logic;
 using MyLibrary.Models;
 using MyLibrary.Utilities;
+using MyLibrary.Utilities.DataAccess;
+using MyLibrary.Utilities.Validators;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,15 +26,12 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            ISqLiteDataAccess sqLiteDataAccess = new SqLiteDataAccess("InventoryDB.sqlite");
-                        
+            ISqLiteDataAccess sqLiteDataAccess = new SqLiteDataAccess("InventoryDB.sqlite");                        
             IProductCategoryValidator productCategoryValidator = new ProductCategoryValidator();
             IProductValidator productValidator = new ProductValidator();
-
             IUserInterface userInterface = new UserInterface();
-
             IInventoryHandler inventoryHandler = new InventoryHandler(sqLiteDataAccess, productCategoryValidator, productValidator, userInterface);
-
+            
             inventoryHandler.CreateDBAndTables();
  
             string choice;
@@ -46,12 +45,10 @@ namespace ConsoleApp1
                 switch (choice)
                 {
                     case "1":
-                        inventoryHandler.DisplayTable<ProductCategoryModel>(inventoryHandler.LoadModel<ProductCategoryModel>(productCategory));
-                       //DisplayDBTable<List<ProductCategoryModel>>(inventoryHandler.LoadModel<ProductCategoryModel>(productCategory));
+                        inventoryHandler.DisplayTable<ProductCategoryModel>(inventoryHandler.LoadModel<ProductCategoryModel>(productCategory));                       
                         break;
                     case "2":
-                        inventoryHandler.DisplayTable<ProductModel>(inventoryHandler.LoadModel<ProductModel>(product));
-                        //DisplayDBTable<List<ProductModel>>(inventoryHandler.LoadModel<ProductModel>(product));
+                        inventoryHandler.DisplayTable<ProductModel>(inventoryHandler.LoadModel<ProductModel>(product));                        
                         break;
                     case "3":
                         (ProductCategoryModel, bool) ValidatedProductCategory = inventoryHandler.CreateModel<ProductCategoryModel>();
@@ -61,10 +58,6 @@ namespace ConsoleApp1
                         ///ToDO: let pass in the productcategories to check if the new prodcategoryid or name is in the list
                         ///For console UI extra validation is needed because user can enter anything which might not be in database
                         ///In WPF a combobox can only contains values which is loaded from database.
-                        //Console.WriteLine("Please choose one id from the list below:");
-                        //DisplayDBTable<List<ProductCategoryModel>>(inventoryHandler.LoadModel<ProductCategoryModel>(productCategory));
-
-
                         (ProductModel, bool) ValidatedProduct = inventoryHandler.CreateModel<ProductModel>();
 
                         SaveOnlyIfValidModel((InventoryHandler)inventoryHandler, ValidatedProduct);

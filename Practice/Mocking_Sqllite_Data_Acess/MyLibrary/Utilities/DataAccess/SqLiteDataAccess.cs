@@ -5,7 +5,7 @@ using System.Linq;
 using Dapper;
 using System.IO;
 
-namespace MyLibrary
+namespace MyLibrary.Utilities.DataAccess
 {    
     public class SqLiteDataAccess : ISqLiteDataAccess
     {

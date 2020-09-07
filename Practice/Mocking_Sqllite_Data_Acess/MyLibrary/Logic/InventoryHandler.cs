@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using FluentValidation.Results;
 using MyLibrary.Models;
 using MyLibrary.Utilities;
+using MyLibrary.Utilities.DataAccess;
+using MyLibrary.Utilities.Validators;
 
 namespace MyLibrary.Logic
 {

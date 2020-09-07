@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MyLibrary
+namespace MyLibrary.Utilities.DataAccess
 {
     public interface ISqLiteDataAccess
     {

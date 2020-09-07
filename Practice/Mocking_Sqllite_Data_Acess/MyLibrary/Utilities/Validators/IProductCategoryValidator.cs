@@ -1,4 +1,4 @@
-﻿namespace MyLibrary.Utilities
+﻿namespace MyLibrary.Utilities.Validators
 {
     public interface IProductCategoryValidator
     {
