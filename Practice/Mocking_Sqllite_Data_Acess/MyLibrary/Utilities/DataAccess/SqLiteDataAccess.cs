@@ -12,7 +12,7 @@ namespace MyLibrary.Utilities.DataAccess
         public string DBName { get; set; }
         //string _dBName;
 
-        public SqLiteDataAccess(string dBName)
+        public SqLiteDataAccess(string dBName = "InventoryDB.sqlite")
         {
             DBName = dBName;
         }

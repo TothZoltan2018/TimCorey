@@ -33,9 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac, Version=5.2.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\packages\Autofac.5.2.0\lib\net461\Autofac.dll</HintPath>
-    </Reference>
     <Reference Include="Dapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Dapper.2.0.35\lib\net461\Dapper.dll</HintPath>
     </Reference>
@@ -70,7 +67,6 @@
     <Compile Include="Models\ProductCategoryModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utilities\AutoFacContainer.cs" />
     <Compile Include="Utilities\DataAccess\ISqLiteDataAccess.cs" />
     <Compile Include="Utilities\DataAccess\IUserInterface.cs" />
     <Compile Include="Utilities\DataAccess\SqLiteDataAccess.cs" />
