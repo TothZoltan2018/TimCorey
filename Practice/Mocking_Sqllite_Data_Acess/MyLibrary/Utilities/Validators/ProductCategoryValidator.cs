@@ -12,7 +12,7 @@ namespace MyLibrary.Utilities.Validators
     //class Validator : AbstractValidator<T> 
     public class ProductCategoryValidator : AbstractValidator<ProductCategoryModel>, IProductCategoryValidator
     {
-        int productCategoryNameLengthMin = 1;
+        int productCategoryNameLengthMin = 2;
         int productCategoryNameLengthhMax = 20;
         public ProductCategoryValidator()
         {

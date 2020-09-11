@@ -13,26 +13,16 @@ namespace ConsoleApp1
 {
     public class Application : IApplication
     {
-        //ISqLiteDataAccess sqLiteDataAccess;
-        //IProductCategoryValidator productCategoryValidator;
-        //IProductValidator productValidator;
-        //IUserInterface userInterface;
         IInventoryHandler inventoryHandler;
-
         ProductCategoryModel productCategory = new ProductCategoryModel();
         ProductModel product = new ProductModel();
-
-        //public Application(ISqLiteDataAccess sqLiteDataAccess, IProductCategoryValidator productCategoryValidator, IProductValidator productValidator, IUserInterface userInterface, IInventoryHandler inventoryHandler)
+                
         public Application(IInventoryHandler inventoryHandler)
         {
-            //this.sqLiteDataAccess = sqLiteDataAccess;
-            //this.productCategoryValidator = productCategoryValidator;
-            //this.productValidator = productValidator;
-            //this.userInterface = userInterface;
             this.inventoryHandler = inventoryHandler;
         }
 
-        public void RunApp()//(IInventoryHandler inventoryHandler, ProductCategoryModel productCategory, ProductModel product)
+        public void RunApp()
         {
             inventoryHandler.CreateDBAndTables();
             string choice;
@@ -143,6 +133,5 @@ namespace ConsoleApp1
 
             return output;
         }
-
     }
 }
