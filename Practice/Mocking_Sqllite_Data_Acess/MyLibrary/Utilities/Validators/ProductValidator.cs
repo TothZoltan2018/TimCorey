@@ -14,15 +14,15 @@ namespace MyLibrary.Utilities.Validators
     {
         int productNameLengthMin = 1;
         int productNameLengthMax = 50;
-        int productQuantityMin = 0;
+        int productQuantityMin = 1;
         int productQuantityMax = 500;
-        int productQuantityMaxForOthers = 200;
+        int productQuantityMaxForOthers = 20000;
 
         public ProductValidator()
         {
             RuleFor(p => p.ProductName).Length(productNameLengthMin, productNameLengthMax).WithMessage($"Please enter a text between {productNameLengthMin} and {productNameLengthMax} characters long");
                        
-            RuleFor(p => p.Quantity).LessThan(productQuantityMax).When(p => p.Unit.ToLower() == "kg" 
+            RuleFor(p => p.Quantity).InclusiveBetween(productQuantityMin, productQuantityMax).When(p => p.Unit.ToLower() == "kg" 
                         || p.Unit.ToLower() == "litre" || p.Unit.ToLower() =="liter"
                         || p.Unit.ToLower() == "dkg" )
                         .WithMessage(($"Please enter a value less than {productQuantityMax}."));

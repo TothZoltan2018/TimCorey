@@ -8,7 +8,7 @@ namespace MyLibrary.Logic
         (T, bool) CreateModel<T>() where T : new();
         void DeleteDB();
         void DisplayTable<M>(List<M> tableContainsForeignKey);
-        string GetDBTableName<T>(T model);
+        //string GetDBTableName<T>(T model);
         List<T> LoadModel<T>(T model);
         void SaveModel<T>(T model);
     }

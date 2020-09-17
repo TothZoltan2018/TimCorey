@@ -14,8 +14,7 @@ namespace MyTests
         ProductCategoryValidator productCategoryValidator = new ProductCategoryValidator();
         ProductCategoryModel productCategory = new ProductCategoryModel
         {
-            ProductCategoryId = 1,
-            ProductCategoryName = ""
+            ProductCategoryId = 1            
         };
 
         [Theory]

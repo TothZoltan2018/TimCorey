@@ -244,7 +244,7 @@ namespace MyLibrary.Logic
             return tableOfModel;
         }
 
-        public string GetDBTableName<T>(T model)
+        private string GetDBTableName<T>(T model)
         {
             string tablelName = model.GetType().Name.Replace("Model", "");
 

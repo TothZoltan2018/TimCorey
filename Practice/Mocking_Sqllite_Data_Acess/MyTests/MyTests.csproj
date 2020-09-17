@@ -107,6 +107,7 @@
   <ItemGroup>
     <Compile Include="InventoryHandlerTests.cs" />
     <Compile Include="ProductCategoryValidatorTests.cs" />
+    <Compile Include="ProductValidatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
