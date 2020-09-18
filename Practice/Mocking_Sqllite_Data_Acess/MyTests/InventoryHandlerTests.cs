@@ -9,44 +9,114 @@ using MyLibrary.Utilities.DataAccess;
 using Autofac.Extras.Moq;
 using Moq;
 using System.Collections.Generic;
+using Xunit.Abstractions;
 
 namespace MyTests
 {    
     public class InventoryHandlerTests
     {
-        [Fact]
-        // LoadModel is a generic method. We are testing it by mocking the database access. (We use Productmodel which is the more complex datatype.)
-        public void LoadModel()
+
+        //[Fact]
+        //// LoadModel is a generic method. We are testing it by mocking the database access. (We use Productmodel which is the more complex datatype.)
+        //public void LoadModel()
+        //{
+        //    using (var mock = AutoMock.GetLoose())
+        //    {
+        //        // DBName property must ve set to the name of the database otherwise
+        //        // Inventoryhandler.Loadmodel will not try to reach out the database.
+        //        mock.Mock<ISqLiteDataAccess>().SetupGet(x => x.DBName).Returns(@"C:\Users\ZoliRege\source\repos\TimCorey\Practice\Mocking_Sqllite_Data_Acess\ConsoleApp1\bin\Debug\InventoryDB.sqlite");
+        //        mock.Mock<ISqLiteDataAccess>().Setup(x => x.LoadData<ProductModel>("SELECT * FROM Product"))
+        //            .Returns(GetMockedData<ProductModel>(new ProductModel()));
+
+        //        var classUnderTest = mock.Create<InventoryHandler>();
+
+        //        var actual = classUnderTest.LoadModel<ProductModel>(new ProductModel());
+
+        //        var expected = GetMockedData<ProductModel>(new ProductModel());
+
+        //        Assert.True(actual != null);
+        //        // Todo check items one by one
+        //        for (int i = 0; i < actual.Count; i++)
+        //        {
+        //            Assert.True(ScrollOverPropertiesAndCheckIfEqual<ProductModel>(actual[i], expected[i]));
+        //        }
+        //    }
+        //}
+
+        [Theory]
+        // https://andrewlock.net/creating-strongly-typed-xunit-theory-test-data-with-theorydata/
+        [ClassData(typeof(LoadProductModelTestData))]
+        [ClassData(typeof(LoadProductCategoryModelTestData))]
+        // notUsedDummyModel parameter is only to be able to use the above ClassData
+        public void LoadModelSuccessfully<T>(T notUsedDummyModel) where T: new()
         {
             using (var mock = AutoMock.GetLoose())
-            {                
-                // DBName property must ve set to the name of the database otherwise
+            {
+                // DBName property must be set to the name of the database otherwise
                 // Inventoryhandler.Loadmodel will not try to reach out the database.
                 mock.Mock<ISqLiteDataAccess>().SetupGet(x => x.DBName).Returns(@"C:\Users\ZoliRege\source\repos\TimCorey\Practice\Mocking_Sqllite_Data_Acess\ConsoleApp1\bin\Debug\InventoryDB.sqlite");
-                mock.Mock<ISqLiteDataAccess>().Setup(x => x.LoadData<ProductModel>("SELECT * FROM Product"))
-                    .Returns(GetMockedData<ProductModel>(new ProductModel()));
+
+                // Which table is queried Product vs ProductCategory? I wanted to retreive the table name
+                //  from Type T and use it in the SQL statement below. BUT:
+                // !!! I do not need to determine it !!! Somehow it stll works fine!                
+                //mock.Mock<ISqLiteDataAccess>().Setup(x => x.LoadData<T>("SELECT * FROM ProductCategory"))
+                //    .Returns(GetMockedData<T>(new T()));
+                //mock.Mock<ISqLiteDataAccess>().Setup(x => x.LoadData<T>("SELECT * FROM Product"))
+                //    .Returns(GetMockedData<T>(new T()));
+
+                string tableName = typeof(T).Name.Replace("Model", "");
+                mock.Mock<ISqLiteDataAccess>().Setup(x => x.LoadData<T>($"SELECT * FROM {tableName}"))
+                    .Returns(GetMockedData<T>(new T()));
 
                 var classUnderTest = mock.Create<InventoryHandler>();
+                //string tablelName = model.GetType().Name.Replace("Model", "");
+                var actual = classUnderTest.LoadModel<T>(new T());
 
-                var actual = classUnderTest.LoadModel<ProductModel>(new ProductModel());
-
-                var expected = GetMockedData<ProductModel>(new ProductModel());
+                var expected = GetMockedData<T>(new T());
 
                 Assert.True(actual != null);
                 // Todo check items one by one
                 for (int i = 0; i < actual.Count; i++)
                 {
-                    Assert.True(ScrollOverPropertiesAndCheckIfEqual<ProductModel>(actual[i], expected[i]));
+                    Assert.True(ScrollOverPropertiesAndCheckIfEqual<T>(actual[i], expected[i]));
                 }
             }
         }
-        
 
+        #region ClassData for testmethod LoadModelSuccessfully
+        public class TheoryData<T> : TheoryData
+        {
+            public void Add(T p)
+            {
+                AddRow(p);
+            }            
+        }
+
+        public class LoadProductModelTestData : TheoryData<ProductModel>
+        {
+            public LoadProductModelTestData()
+            {
+                ProductModel p = new ProductModel();
+                CreateOneDummyModelInstance(p);
+                Add(p);
+            }
+        }
+
+        public class LoadProductCategoryModelTestData : TheoryData<ProductCategoryModel>
+        {
+            public LoadProductCategoryModelTestData()
+            {
+                ProductCategoryModel p = new ProductCategoryModel();
+                CreateOneDummyModelInstance(p);
+                Add(p);
+            }
+        }
+        #endregion
 
         private List<T> GetMockedData<T>(T model)
         {
             List<T> output = new List<T>();
-            int numberOfItems = 5;
+            int numberOfItems = 3;
             for (int i = 0; i < numberOfItems; i++)
             {
                 CreateOneDummyModelInstance(model);
