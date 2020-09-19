@@ -56,22 +56,18 @@ namespace MyLibrary.Logic
             ValidationResult validation = null;
 
             do
-            {
-                for (int i = 0; i < propertyInfos.Length; i++)
+            {//Id (index 0) should not be read because that is not pushed to the DB hence that is autoincremented                    
+                for (int i = 1; i < propertyInfos.Length; i++)
                 {
-                    //Id should not be read because that is not pushed to the DB hence that is autoincremented                    
-                    if (i > 0)
-                    {
                         _userInterface.WriteOutToUser($"Please enter {propertyInfos[i].Name}:");
 
-                        if (SetForeignKeyProperty(model, propertyInfos[i]) == false)
+                    if (SetForeignKeyProperty(model, propertyInfos[i]) == false)
+                    {
+                        if (SetPropertyValue(model, propertyInfos[i]) == false)
                         {
-                            if (SetPropertyValue(model, propertyInfos[i]) == false)
-                            {
-                                i--;
-                            }
-                        }  
-                    }
+                            i--;
+                        }
+                    } 
                 }
 
                 if (model.GetType() == typeof(ProductCategoryModel))
@@ -212,20 +208,40 @@ namespace MyLibrary.Logic
 
         public void SaveModel<T>(T model)
         {
-            string sql = "";
-
-            if (GetDBTableName<T>(model) == "ProductCategory")
-            {
-                sql = $"INSERT INTO ProductCategory (ProductCategoryName) VALUES (@ProductCategoryName)";
-            }
-
-            if (GetDBTableName<T>(model) == "Product")
-            {
-                sql = "INSERT INTO Product (ProductName, [Description], ProductCategoryId, BestBefore, Quantity, Unit)" +
-                    " VALUES (@ProductName, @Description, @ProductCategoryId, @BestBefore, @Quantity, @Unit)";
-            }
-
+            string sql = CreateSqlToSave(model);
+ 
             _dataAccess.SaveData(model, sql);
+        }
+
+        private string CreateSqlToSave<T>(T model)
+        {
+            string sql = $"INSERT INTO {GetDBTableName<T>(model)} (";
+
+            PropertyInfo[] pi = model.GetType().GetProperties();
+            for (int i = 1; i < pi.Length; i++)
+            {
+                if (i > 1)
+                {
+                    sql += ", ";
+                }
+                sql += $@"{pi[i].Name}";
+            }
+
+            sql += ") VALUES (";
+
+            for (int i = 1; i < pi.Length; i++)
+            {
+                if (i > 1)
+                {
+                    sql += ", ";
+                }
+
+                sql += $@"@{pi[i].Name}";
+            }
+
+            sql += ")";
+
+            return sql;
         }
 
         public List<T> LoadModel<T>(T model)

@@ -69,7 +69,7 @@ namespace MyTests
                     .Returns(GetMockedData<T>(new T()));
 
                 var classUnderTest = mock.Create<InventoryHandler>();
-                //string tablelName = model.GetType().Name.Replace("Model", "");
+                
                 var actual = classUnderTest.LoadModel<T>(new T());
 
                 var expected = GetMockedData<T>(new T());
@@ -112,6 +112,40 @@ namespace MyTests
             }
         }
         #endregion
+
+        [Theory]
+        [ClassData(typeof(LoadProductModelTestData))]
+        [ClassData(typeof(LoadProductCategoryModelTestData))]
+
+        // I don't wanted to overgeneralize this method by using InventoryHandler.CreateSqlToSave method.
+        // Therfore only 2 models are used hereby.
+        public void SaveModelSuccessfully<T>(T model)// where T : new()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                CreateOneDummyModelInstance(model);
+
+                string sql = string.Empty;
+                string tablelName = model.GetType().Name.Replace("Model", "");
+                if (tablelName == "ProductCategory")
+                {
+                    sql = $"INSERT INTO ProductCategory (ProductCategoryName) VALUES (@ProductCategoryName)";
+                }
+
+                if (tablelName == "Product")
+                {
+                    sql = "INSERT INTO Product (ProductName, Description, ProductCategoryId, BestBefore, Quantity, Unit)" +
+                        " VALUES (@ProductName, @Description, @ProductCategoryId, @BestBefore, @Quantity, @Unit)";
+                }
+
+                mock.Mock<ISqLiteDataAccess>().Setup(x => x.SaveData(model, sql));
+                var classUnderTest = mock.Create<InventoryHandler>();
+                classUnderTest.SaveModel(model);
+
+                mock.Mock<ISqLiteDataAccess>().Verify(x => x.SaveData(model, sql), Times.Once);
+            }
+
+        }
 
         private List<T> GetMockedData<T>(T model)
         {
