@@ -59,7 +59,7 @@ namespace MyLibrary.Logic
             {//Id (index 0) should not be read because that is not pushed to the DB hence that is autoincremented                    
                 for (int i = 1; i < propertyInfos.Length; i++)
                 {
-                        _userInterface.WriteOutToUser($"Please enter {propertyInfos[i].Name}:");
+                    _userInterface.WriteOutToUser($"Please enter {propertyInfos[i].Name}:");
 
                     if (SetForeignKeyProperty(model, propertyInfos[i]) == false)
                     {

@@ -15,38 +15,10 @@ namespace MyTests
 {    
     public class InventoryHandlerTests
     {
-
-        //[Fact]
-        //// LoadModel is a generic method. We are testing it by mocking the database access. (We use Productmodel which is the more complex datatype.)
-        //public void LoadModel()
-        //{
-        //    using (var mock = AutoMock.GetLoose())
-        //    {
-        //        // DBName property must ve set to the name of the database otherwise
-        //        // Inventoryhandler.Loadmodel will not try to reach out the database.
-        //        mock.Mock<ISqLiteDataAccess>().SetupGet(x => x.DBName).Returns(@"C:\Users\ZoliRege\source\repos\TimCorey\Practice\Mocking_Sqllite_Data_Acess\ConsoleApp1\bin\Debug\InventoryDB.sqlite");
-        //        mock.Mock<ISqLiteDataAccess>().Setup(x => x.LoadData<ProductModel>("SELECT * FROM Product"))
-        //            .Returns(GetMockedData<ProductModel>(new ProductModel()));
-
-        //        var classUnderTest = mock.Create<InventoryHandler>();
-
-        //        var actual = classUnderTest.LoadModel<ProductModel>(new ProductModel());
-
-        //        var expected = GetMockedData<ProductModel>(new ProductModel());
-
-        //        Assert.True(actual != null);
-        //        // Todo check items one by one
-        //        for (int i = 0; i < actual.Count; i++)
-        //        {
-        //            Assert.True(ScrollOverPropertiesAndCheckIfEqual<ProductModel>(actual[i], expected[i]));
-        //        }
-        //    }
-        //}
-
         [Theory]
         // https://andrewlock.net/creating-strongly-typed-xunit-theory-test-data-with-theorydata/
-        [ClassData(typeof(LoadProductModelTestData))]
-        [ClassData(typeof(LoadProductCategoryModelTestData))]
+        [ClassData(typeof(ProductModelTestData))]
+        [ClassData(typeof(ProductCategoryModelTestData))]
         // notUsedDummyModel parameter is only to be able to use the above ClassData
         public void LoadModelSuccessfully<T>(T notUsedDummyModel) where T: new()
         {
@@ -83,7 +55,7 @@ namespace MyTests
             }
         }
 
-        #region ClassData for testmethod LoadModelSuccessfully
+        #region ClassData for testmethod LoadModelSuccessfully and SaveModelSuccessfully
         public class TheoryData<T> : TheoryData
         {
             public void Add(T p)
@@ -92,9 +64,9 @@ namespace MyTests
             }            
         }
 
-        public class LoadProductModelTestData : TheoryData<ProductModel>
+        public class ProductModelTestData : TheoryData<ProductModel>
         {
-            public LoadProductModelTestData()
+            public ProductModelTestData()
             {
                 ProductModel p = new ProductModel();
                 CreateOneDummyModelInstance(p);
@@ -102,9 +74,9 @@ namespace MyTests
             }
         }
 
-        public class LoadProductCategoryModelTestData : TheoryData<ProductCategoryModel>
+        public class ProductCategoryModelTestData : TheoryData<ProductCategoryModel>
         {
-            public LoadProductCategoryModelTestData()
+            public ProductCategoryModelTestData()
             {
                 ProductCategoryModel p = new ProductCategoryModel();
                 CreateOneDummyModelInstance(p);
@@ -114,8 +86,8 @@ namespace MyTests
         #endregion
 
         [Theory]
-        [ClassData(typeof(LoadProductModelTestData))]
-        [ClassData(typeof(LoadProductCategoryModelTestData))]
+        [ClassData(typeof(ProductModelTestData))]
+        [ClassData(typeof(ProductCategoryModelTestData))]
 
         // I don't wanted to overgeneralize this method by using InventoryHandler.CreateSqlToSave method.
         // Therfore only 2 models are used hereby.
@@ -123,7 +95,7 @@ namespace MyTests
         {
             using (var mock = AutoMock.GetLoose())
             {
-                CreateOneDummyModelInstance(model);
+                //CreateOneDummyModelInstance(model);
 
                 string sql = string.Empty;
                 string tablelName = model.GetType().Name.Replace("Model", "");
