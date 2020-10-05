@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.Design;
 
-namespace TrackerLibrary
+namespace TrackerLibrary.Models
 {
     public class PrizeModel
     {

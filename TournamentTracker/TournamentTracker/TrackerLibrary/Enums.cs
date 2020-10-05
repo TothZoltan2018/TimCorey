@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace TrackerLibrary
 {
-    public class TeamModel
+    public enum DatabaseType
     {
-        public List<PersonModel> TeamMembers { get; set; } = new List<PersonModel>();
-        public string TeamName { get; set; }
+        Sql,
+        TextFile
     }
 }
