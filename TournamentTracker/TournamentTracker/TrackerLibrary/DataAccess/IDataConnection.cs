@@ -10,11 +10,12 @@ namespace TrackerLibrary.DataAccess
     public interface IDataConnection
     {
         /// <summary>
-        /// Saves prizes. In the model input parameter the id field is empty. Wnen it is ouutput,
+        /// Saves prizes. In the model input parameter the id field is empty. As output,
         /// the id is filled out.
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         PrizeModel CreatePrize(PrizeModel model);
+        PersonModel CreatePerson(PersonModel model);
     }
 }
