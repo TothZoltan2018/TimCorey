@@ -15,9 +15,12 @@ namespace TrackerUI
 {
     public partial class CreatePrizeForm : Form
     {
-        public CreatePrizeForm()
+        IPrizeRequester callingForm;
+        public CreatePrizeForm(IPrizeRequester caller)
         {
             InitializeComponent();
+
+            callingForm = caller;
         }
 
         private void createPrizeButton_Click(object sender, EventArgs e)
@@ -30,12 +33,17 @@ namespace TrackerUI
                     prizeAmountValue.Text,
                     prizePercentageValue.Text);
 
-                GlobalConfig.Connection.CreatePrize(model);
+                GlobalConfig.Connection.CreatePrize(model); // Model goes into the method, got id filled and returned the same model instance
 
-                placeNameValue.Text = "";
-                placeNumberValue.Text = "";
-                prizeAmountValue.Text = "0";
-                prizePercentageValue.Text = "0";
+                // We can pass out the model to a class, who called us, who implements IPrizeRequester, such as CreateTournamentForm class
+                callingForm.PrizeComplete(model);
+
+                this.Close();
+                //Form is closed therefore reset these values is not needed
+                //placeNameValue.Text = "";
+                //placeNumberValue.Text = "";
+                //prizeAmountValue.Text = "0";
+                //prizePercentageValue.Text = "0";
             }
             else
             {
