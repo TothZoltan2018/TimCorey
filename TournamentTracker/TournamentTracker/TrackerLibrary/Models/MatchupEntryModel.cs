@@ -1,10 +1,14 @@
-﻿namespace TrackerLibrary.Models
+﻿using System.Data;
+
+namespace TrackerLibrary.Models
 {
     /// <summary>
     /// Represents one team in a matchup
     /// </summary>
     public class MatchupEntryModel
     {
+        public int Id { get; set; }
+
         /// <summary>
         /// Represents one team in the matchup
         /// </summary>

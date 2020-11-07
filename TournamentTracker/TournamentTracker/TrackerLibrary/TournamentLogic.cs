@@ -24,6 +24,7 @@ namespace TrackerLibrary
 
             model.Rounds.Add(CreateFirstRound(byes, randomizedTeams));
             
+            CreateOtherRounds(model, rounds);
         }
 
         private static void CreateOtherRounds(TournamentModel model, int rounds)
