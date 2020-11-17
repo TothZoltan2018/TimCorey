@@ -27,5 +27,38 @@ namespace TrackerLibrary.Models
         /// Which round this match is a part of
         /// </summary>
         public int MatchupRound { get; set; }
+
+        /// <summary>
+        /// A value used only for displaying it in the TournamentViewerForm matchupListBox.DisplayMember
+        /// </summary>
+        public string DisplayName
+        {
+            get
+            {                
+                string output = "";
+
+                foreach (MatchupEntryModel me in Entries)
+                {
+                    if (me.TeamCompeting != null)
+                    {
+                        if (output.Length == 0)
+                        {
+                            output = me.TeamCompeting.TeamName;
+                        }
+                        else
+                        {
+                            output += $" vs. { me.TeamCompeting.TeamName }";
+                        }
+                    }
+                    else
+                    {
+                        output = "Matchup Not Yet Determined.";
+                        break; // If we do not know a team, then no sense to continue because how coud we name it?
+                    }
+                }
+
+                return output;
+            }
+        }
     }
 }
