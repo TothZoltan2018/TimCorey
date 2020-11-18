@@ -14,8 +14,9 @@ namespace TrackerUI
     public partial class TournamentViewerForm : Form
     {
         private TournamentModel tournament;
-        List<int> rounds = new List<int>();
-        List<MatchupModel> selectedMatchups = new List<MatchupModel>();
+        // Bindinglist: if a data is refreshed, it gets updated automatically
+        BindingList<int> rounds = new BindingList<int>();
+        BindingList<MatchupModel> selectedMatchups = new BindingList<MatchupModel>();        
 
         public TournamentViewerForm(TournamentModel tournamentModel)
         {
@@ -23,6 +24,8 @@ namespace TrackerUI
 
             tournament = tournamentModel;
 
+            WireUpLists();
+            
             LoadFormData();
 
             LoadRounds();
@@ -33,23 +36,17 @@ namespace TrackerUI
             tournamentName.Text = tournament.TournamentName;
         }
 
-        private void WireUpRoundsLists()
-        {
-            roundDropDown.DataSource = null;
-            roundDropDown.DataSource = rounds;            
-        }
-        private void WireUpMatchupsLists()
-        {
-            // The next line makes event matchupListBox_SelectedIndexChanged!
-            // So LoadMatchup needs to check for null value to prevent nullreference exception            
-            matchupListBox.DataSource = null; // Btw is this line needed?
+        private void WireUpLists()
+        {                       
+            roundDropDown.DataSource = rounds;
             matchupListBox.DataSource = selectedMatchups;
             matchupListBox.DisplayMember = "DisplayName";
         }
 
         private void LoadRounds()
-        {
-            rounds = new List<int>();
+        {            
+            rounds.Clear();
+
             rounds.Add(1);
             int currRound = 1;
 
@@ -69,33 +66,36 @@ namespace TrackerUI
                 }
             }
 
-            WireUpRoundsLists();
+            // After loading all the rounds it pupulates the matchupListbox with the matchups of round 1.
+            LoadMatchups(1);
         }
 
         private void roundDropDown_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadMatchups();
+            LoadMatchups((int)roundDropDown.SelectedItem);
         }
 
-        private void LoadMatchups()
+        private void LoadMatchups(int round)
         {
-            int round = (int)roundDropDown.SelectedItem;
-
             foreach (List<MatchupModel> matchups in tournament.Rounds)
             {
                 if (matchups.First().MatchupRound == round)
                 {
-                    selectedMatchups = matchups;
+                    selectedMatchups.Clear();
+                    foreach (MatchupModel m in matchups)
+                    {
+                        selectedMatchups.Add(m);
+                    }
+                    // This does not work. The foreach loop above does.
+                    //selectedMatchups = new BindingList<MatchupModel>(matchups);
                 }
             }
 
-            WireUpMatchupsLists();
+            LoadMatchup(selectedMatchups.First());
         }
 
-        private void LoadMatchup()
-        {
-            MatchupModel m = (MatchupModel)matchupListBox.SelectedItem;
-
+        private void LoadMatchup(MatchupModel m)
+        {            
             if (m != null)
             {
                 for (int i = 0; i < m.Entries.Count; i++)
@@ -136,7 +136,7 @@ namespace TrackerUI
 
         private void matchupListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadMatchup();
+            LoadMatchup((MatchupModel)matchupListBox.SelectedItem);
         }
     }
 }
