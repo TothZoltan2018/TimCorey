@@ -212,43 +212,11 @@ namespace TrackerUI
                         }                        
                     }
                 }
-                
-                // TODO: might need to be configured if the higher score or the lower score wins
-                if (teamOneScore > teamTwoScore)
-                {                    
-                    m.Winner = m.Entries[0].TeamCompeting;
-                }
-                else if (teamTwoScore > teamOneScore)
-                {
-                    m.Winner = m.Entries[1].TeamCompeting;
-                }
-                else
-                {
-                    MessageBox.Show("I do not handle tie games.");
-                }
-                                
-                foreach (List<MatchupModel> round in tournament.Rounds)
-                {
-                    foreach (MatchupModel rm in round)
-                    {
-                        foreach (MatchupEntryModel me in rm.Entries)
-                        {
-                            if (me.ParentMatchup != null)
-                            {
-                                if (me.ParentMatchup.Id == m.Id) //m.id: current match
-                                {
-                                    me.TeamCompeting = m.Winner; // For the next round!
-                                    GlobalConfig.Connection.UpdateMatchup(rm); 
-                                }
-                            }
-                        }
-                    }
-                }
+
+                TournamentLogic.UpdateTournamentResults(tournament);
 
                 // Refreshing the MatchupListBox to take out the scored matchup if the checkbox is checked
                 LoadMatchups((int)roundDropDown.SelectedItem);
-
-                GlobalConfig.Connection.UpdateMatchup(m);
             }
         }
     }
