@@ -117,8 +117,6 @@ namespace TrackerUI
                 return;
             }
 
-
-            // Create our tournament model
             TournamentModel tm = new TournamentModel();
 
             tm.TournamentName = tournamentNameValue.Text;
@@ -129,10 +127,7 @@ namespace TrackerUI
 
             // TODO - Wire up our machups
             TournamentLogic.CreateRounds(tm);
-
-            // Create Tournament entry
-            // Create all of the prizes entries
-            // Create all of the team entries
+                        
             GlobalConfig.Connection.CreateTournament(tm);
 
             TournamentViewerForm frm = new TournamentViewerForm(tm);

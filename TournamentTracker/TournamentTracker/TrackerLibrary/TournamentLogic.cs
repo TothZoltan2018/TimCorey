@@ -100,7 +100,7 @@ namespace TrackerLibrary
                         m.Winner = m.Entries[1].TeamCompeting;
                     }
                     else
-                    {// TODO: what about eg. Score: 10-10?
+                    {
                         throw new Exception("We do not alllow ties in this application!");
                     }
                 }
@@ -116,7 +116,7 @@ namespace TrackerLibrary
                         m.Winner = m.Entries[1].TeamCompeting;
                     }
                     else
-                    {// TODO: what about eg. Score: 10-10?
+                    {
                         throw new Exception("We do not alllow ties in this application!");
                     }
                 }
