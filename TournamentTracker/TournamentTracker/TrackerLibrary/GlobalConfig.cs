@@ -48,5 +48,11 @@ namespace TrackerLibrary
             // We had to add reference assembly System.Configuration
             return ConfigurationManager.ConnectionStrings[name].ConnectionString;
         }
+
+        public static string AppKeyLookup(string key)
+        {
+            return ConfigurationManager.AppSettings[key];
+
+        }
     }
 }

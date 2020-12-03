@@ -125,10 +125,12 @@ namespace TrackerUI
             tm.Prizes = selectedPrizes;
             tm.EnteredTeams = selectedTeams;
 
-            // TODO - Wire up our machups
+            // Wire up our machups
             TournamentLogic.CreateRounds(tm);
                         
             GlobalConfig.Connection.CreateTournament(tm);
+
+            tm.AlertUsersToNewRound();
 
             TournamentViewerForm frm = new TournamentViewerForm(tm);
             frm.Show();
