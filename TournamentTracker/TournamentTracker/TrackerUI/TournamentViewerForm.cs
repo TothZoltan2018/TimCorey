@@ -25,11 +25,19 @@ namespace TrackerUI
 
             tournament = tournamentModel;
 
+            // Subscribing to the OnTournamentComplete event
+            tournament.OnTournamentComplete += Tournament_OnTournamentComplete;
+
             WireUpLists();
             
             LoadFormData();
 
             LoadRounds();
+        }
+        // What happens when a tournament is complete
+        private void Tournament_OnTournamentComplete(object sender, DateTime e)
+        {
+            this.Close();
         }
 
         private void LoadFormData()
